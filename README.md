@@ -4,7 +4,7 @@ Lokale Countdown-App nach den bereitgestellten Vorlagen, mit separater Browser-A
 
 ## Fertige Downloads
 
-Unter **Releases** stehen portable Pakete für Windows (x64), Linux (x64) sowie macOS (Intel und Apple Silicon) bereit. Archiv entpacken und **Start Stage Timer.bat**, **start-stage-timer.sh** oder **Start Stage Timer.command** ausführen. Die Pakete bringen ihre eigene Node.js-Laufzeit mit; eine separate Installation ist nicht nötig. Auf macOS kann beim ersten Start ein Rechtsklick auf die Datei und anschließend **Öffnen** erforderlich sein.
+Unter **Releases** stehen ein Setup-Assistent für Windows (x64) sowie portable Pakete für Windows (x64), Linux (x64) und macOS (Intel und Apple Silicon) bereit. Unter Windows ist die Datei mit der Endung `-setup.exe` der einfachste Weg; sie erstellt einen Startmenü-Eintrag, optional eine Desktop-Verknüpfung und bringt einen Deinstaller mit. Für die portablen Pakete das Archiv entpacken und **Start Stage Timer.bat**, **start-stage-timer.sh** oder **Start Stage Timer.command** ausführen. Alle Pakete bringen ihre eigene Node.js-Laufzeit mit; eine separate Installation ist nicht nötig. Auf macOS kann beim ersten Start ein Rechtsklick auf die Datei und anschließend **Öffnen** erforderlich sein.
 
 ## Start
 

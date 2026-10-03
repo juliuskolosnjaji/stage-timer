@@ -9,14 +9,14 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: 24
 
@@ -25,6 +25,72 @@ jobs:
 
       - name: Build portable bundles
         run: bash scripts/package-release.sh "${GITHUB_REF_NAME#v}" "$(node -p 'process.versions.node')"
+
+      - name: Upload portable bundles
+        uses: actions/upload-artifact@v7
+        with:
+          name: portable-bundles
+          path: dist/*
+          if-no-files-found: error
+
+  windows-installer:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Download Windows bundle
+        uses: actions/download-artifact@v8
+        with:
+          name: portable-bundles
+          path: dist
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build Windows installer
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME.TrimStart('v')
+          $archive = Get-Item "dist/stage-timer-$version-windows-x64.zip"
+          $inputDir = Join-Path $env:RUNNER_TEMP "stage-timer-installer"
+          Expand-Archive -Path $archive -DestinationPath $inputDir
+          $sourceDir = (Get-ChildItem $inputDir -Directory | Select-Object -First 1).FullName
+          $outputDir = (Resolve-Path "dist").Path
+          $compilerPaths = @(
+            "${env:ProgramFiles(x86)}\Inno Setup *\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup *\ISCC.exe"
+          )
+          $iscc = Get-ChildItem $compilerPaths -ErrorAction SilentlyContinue |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1
+          if (-not $iscc) { throw "Inno Setup compiler not found" }
+          & $iscc.FullName "/DMyAppVersion=$version" "/DSourceDir=$sourceDir" "/DOutputDir=$outputDir" "installer\windows.iss"
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed with exit code $LASTEXITCODE" }
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-installer
+          path: dist/*-setup.exe
+          if-no-files-found: error
+
+  release:
+    needs: [build, windows-installer]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download portable bundles
+        uses: actions/download-artifact@v8
+        with:
+          name: portable-bundles
+          path: dist
+
+      - name: Download Windows installer
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-installer
+          path: dist
 
       - name: Publish GitHub release
         env:
