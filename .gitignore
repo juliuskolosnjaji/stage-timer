@@ -1,0 +1,8 @@
+node_modules/
+dist/
+settings.json
+settings.json.tmp
+.DS_Store
+*.log
+logo.png
+logo.png.tmp
