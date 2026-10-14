@@ -16,7 +16,7 @@ Bedienpult: http://localhost:8181 · Ausgabe: http://localhost:8181/display
 
 Ausgabe auf den zweiten Bildschirm ziehen und „Vollbild“ anklicken. Weitere Geräte im gleichen LAN öffnen `http://<IP-des-Timer-Rechners>:8181/display`. Der Server muss weiterlaufen. Mit Strg+C beenden. Abweichender HTTP-Port: `PORT=8182 npm start`.
 
-Die Uhrzeit kommt vom jeweiligen Anzeigegerät, der Countdown zentral vom Server. Presets und Einstellungen werden in `settings.json` gespeichert. Laufende Timer werden nach einem Neustart nicht automatisch fortgesetzt. Bei Verlust des DMX-Signals läuft der Timer weiter; bei Verlust der Browserverbindung friert die Ausgabe ein und zeigt einen Verbindungshinweis. Der Server stellt den Zustand beim Wiederverbinden wieder her.
+Die Uhrzeit kommt vom jeweiligen Anzeigegerät, die Countdowns zentral vom Server. Screens, Presets, geplante Starts und Einstellungen werden in `settings.json` gespeichert. Laufende Timer werden nach einem Neustart nicht automatisch fortgesetzt; ein noch ausstehender geplanter Start bleibt erhalten und wird zum festgelegten Zeitpunkt ausgelöst. War der Server zu diesem Zeitpunkt kurz offline, wird die bereits verstrichene Zeit beim nächsten Start berücksichtigt. Bei Verlust des DMX-Signals läuft der Timer weiter; bei Verlust der Browserverbindung friert die Ausgabe ein und zeigt einen Verbindungshinweis. Der Server stellt den Zustand beim Wiederverbinden wieder her.
 
 ## Bedienung
 
@@ -24,12 +24,17 @@ Die Uhrzeit kommt vom jeweiligen Anzeigegerät, der Countdown zentral vom Server
 - Start/Pause: Schaltfläche oder Leertaste; Reset: Schaltfläche oder R.
 - Strg/⌘ + Preset-Klick speichert die eingegebene Dauer als Preset.
 - Zeitkorrektur ±1 / ±5 Minuten funktioniert auch während des Countdowns.
+- Über **Screen → Neu** lassen sich mehrere unabhängige Timer anlegen. Jeder Screen erhält einen eigenen Ausgabe-Link, eigene Anzeigeeinstellungen, ein eigenes Logo und einen eigenen Zeitplan.
+- Unter **Geplanter Start** wird die aktuell eingestellte Dauer an einem lokalen Datum mit Uhrzeit automatisch gestartet. Pro Screen kann ein Start geplant oder wieder gelöscht werden.
 - Nachrichten erscheinen auf der Ausgabe; ✕ blendet sie aus.
 - Timer, Uhr, Black und Testbild stehen als Ausgabemodi bereit.
 - Warnschwellen, Stundenanzeige, Hintergrund, Helligkeit, Fortschrittsbalken und Stoppen bei Null sind einstellbar.
 - Der Signalton wird im Bedienpult erzeugt. Vor der Show einmal den Testton anklicken, damit der Browser Audio freigibt. Bei mehreren geöffneten Bedienpulten kann der Ton mehrfach ertönen.
+- Logo-Upload, Sichtbarkeit, Deckkraft, Skalierung von 5–50 % und Position werden pro Screen unter **Einstellungen → Logo-Wasserzeichen** verwaltet.
 
 ## grandMA3 anschließen
+
+DMX steuert immer den ersten, in der Oberfläche mit **DMX** markierten Haupt-Screen. Weitere Screens haben unabhängige Timer und Zeitpläne, werden aber manuell beziehungsweise über ihren geplanten Start gesteuert. So kann das DMX-Ziel nicht durch einen versehentlichen Screen-Wechsel am Bedienpult verändert werden.
 
 1. Timer-Rechner und grandMA3 ins gleiche erreichbare Show-Netz verbinden. Die Rechner-IP steht unten im Bedienpult. Bei mehreren Netzwerkadaptern am besten Unicast verwenden.
 2. In der App unter **Einstellungen → grandMA3 / DMX-Eingang** sACN oder Art-Net wählen, Universum und Startadresse setzen. Beispiel: Universum 1, Adresse 1.

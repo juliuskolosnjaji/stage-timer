@@ -1,1 +1,1 @@
-{"name":"stage-timer","version":"2.0.0","private":true,"type":"module","scripts":{"start":"node server.js","test":"node --test","package":"bash scripts/package-release.sh 2.0.0 $(node -p 'process.versions.node')"},"engines":{"node":">=22"}}
+{"name":"stage-timer","version":"2.1.0","private":true,"type":"module","scripts":{"start":"node server.js","test":"node --test","package":"bash scripts/package-release.sh 2.1.0 $(node -p 'process.versions.node')"},"engines":{"node":">=22"}}

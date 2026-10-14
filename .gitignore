@@ -6,3 +6,5 @@ settings.json.tmp
 *.log
 logo.png
 logo.png.tmp
+logo-*.png
+logo-*.png.tmp
