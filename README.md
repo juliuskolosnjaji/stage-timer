@@ -35,37 +35,27 @@ Die Uhrzeit kommt vom jeweiligen Anzeigegerät, der Countdown zentral vom Server
 2. In der App unter **Einstellungen → grandMA3 / DMX-Eingang** sACN oder Art-Net wählen, Universum und Startadresse setzen. Beispiel: Universum 1, Adresse 1.
 3. In grandMA3 unter **DMX Protocols** das entsprechende Protokoll aktivieren und eine Output-Konfiguration für das gewünschte lokale MA-Universum anlegen; den passenden Netzwerkadapter in der Output Configuration wählen. Output aktivieren.
 4. sACN: Output Unicast an die IP des Timer-Rechners, sACN-Universum 1, Amount 1. Alternativ Output Multicast. Art-Net: gezieltes Unicast oder Broadcast konfigurieren; Net 0, Sub-Net 0, Universe 0 entspricht App-Universum 1. Automatische ArtPoll-Erkennung wird nicht implementiert.
-5. Sieben aufeinanderfolgende 8-Bit-Steuerkanäle patchen (z. B. eigener Fixture Type mit sieben ungefilterten Steuerattributen). Die Werte unten sind **rohe DMX-Werte, keine Prozentwerte**. Bei Verwendung von sieben Generic-Dimmern beeinflussen Grand Master, Blackout und Dimmer-Master die Werte; für den Showbetrieb einen eigenen Steuer-Fixture-Type verwenden. Ein importierbares GDTF-Profil liegt unter `fixtures/StageTimer@Stage_Timer@7CH_v1.0.gdtf`; siehe [Import-Anleitung](fixtures/IMPORT-grandMA3.md).
-6. Kanal für Helligkeit auf 255 setzen, Ausgabemodus auf 0. Im Bedienpult muss der Empfang samt Quell-IP erscheinen.
+5. 25 aufeinanderfolgende 8-Bit-Steuerkanäle patchen. Für den Showbetrieb das importierbare Profil `fixtures/StageTimer@Stage_Timer@25CH_v2.0.gdtf` verwenden; siehe [Import-Anleitung](fixtures/IMPORT-grandMA3.md). Es verhindert, dass Grand Master oder Blackout die Steuerbefehle skalieren.
+6. Alle Tasterkanäle auf 0 und Helligkeit auf 255 setzen. Im Bedienpult muss der Empfang samt Quell-IP erscheinen.
 
-### 7-Kanal-Patch
+### 25-Kanal-Patch
 
-| Offset | Bei Adresse 1 | Funktion | DMX-Wert |
-| --- | --- | --- | --- |
-| +0 | 1 | Befehl | 0–31 neutral; 32–95 Start; 96–159 Pause; 160–223 Reset; 224–255 Black |
-| +1 | 2 | Stunden | 0–99, höhere Werte werden auf 99 begrenzt |
-| +2 | 3 | Minuten | 0–59, höhere Werte werden auf 59 begrenzt |
-| +3 | 4 | Sekunden | 0–59, höhere Werte werden auf 59 begrenzt |
-| +4 | 5 | Dauer übernehmen | Wechsel von 0–127 auf 128–255 |
-| +5 | 6 | Ausgabemodus | 0–63 Timer; 64–127 Uhr; 128–191 Black; 192–255 Test |
-| +6 | 7 | Helligkeit | 0–255 → 10–100 %, Mindesthelligkeit 10 % |
+| Offset | Bei Adresse 1 | Funktion |
+| --- | --- | --- |
+| +0 … +9 | 1–10 | 5, 10, 15 … 50 Minuten laden |
+| +10 / +11 | 11 / 12 | +5 / −5 Minuten |
+| +12 / +13 / +14 | 13 / 14 / 15 | Start / Pause / Reset |
+| +15 / +16 | 16 / 17 | +1 / −1 Minute |
+| +17 / +18 | 18 / 19 | +2 / −2 Minuten |
+| +19 … +22 | 20–23 | Timer / Uhr / Black / Testbild |
+| +23 | 24 | Signalton: 0–127 aus, 128–255 an |
+| +24 | 25 | Helligkeit: 0–255 → 10–100 % |
 
-Befehle reagieren auf den Wechsel in einen Wertebereich. Für einen erneuten Start-Befehl zuerst Neutral senden. Zeitübernahme setzt den Timer auf die neue Dauer und pausiert ihn. Gleichzeitige Lade- und Startflanke lädt zuerst und startet danach. Der Black-Befehl hat Vorrang vor dem Ausgabemodus; zum Verlassen Black abwählen und Ausgabekanal ändern. UI-Befehle gelten bis zum nächsten relevanten DMX-Wertwechsel; Helligkeit wird mit jedem Paket übernommen.
+Alle Tasterkanäle reagieren auf die steigende Flanke: 0–127 ist bereit, 128–255 löst aus. Vor einer Wiederholung muss der Kanal unter 128 zurückkehren. Eine Zeitwahl pausiert den Timer. Korrekturen funktionieren pausiert und laufend. Ton und Helligkeit sind Pegelkanäle und werden mit jedem Paket übernommen. Gleichzeitige Befehle werden in der Reihenfolge Zeitwahl/Korrektur, Transport, Ausgabe verarbeitet.
 
-### Beispiel: 5 Minuten per Cues starten
+### Beispiel: 30 Minuten per Cues starten
 
-Alle Kanäle explizit speichern, Fade und Delay auf 0 setzen (keine Überblendungen auf Steuerkanälen).
-
-| Cue | Befehl | Std | Min | Sek | Laden | Ausgabe | Helligkeit |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Vorbereiten | 0 | 0 | 5 | 0 | 0 | 0 | 255 |
-| Laden | 0 | 0 | 5 | 0 | 255 | 0 | 255 |
-| Start | 64 | 0 | 5 | 0 | 0 | 0 | 255 |
-| Pause | 128 | 0 | 5 | 0 | 0 | 0 | 255 |
-| Weiter | 64 | 0 | 5 | 0 | 0 | 0 | 255 |
-| Reset | 192 | 0 | 5 | 0 | 0 | 0 | 255 |
-
-Vorbereiten und Laden jeweils mindestens ca. 0,1 s ausgeben, sodass tatsächlich ein DMX-Paket jeder Flanke übertragen wird. Zum Wiederholen der Show die Vorbereitungs-Cue erneut ausgeben.
+Alle Taster zunächst auf 0, Fade und Delay auf 0. Kanal 6 (`TimerPreset30`) kurz auf 255 und zurück auf 0 setzen. Danach Kanal 13 (`TimerStart`) kurz auf 255 und zurück auf 0 setzen. Pause, Weiter und Reset werden genauso über die Kanäle 14, 13 und 15 gepulst. Jeder Zustand muss mindestens ein DMX-Paket lang anliegen.
 
 ## Netzwerk und Grenzen
 

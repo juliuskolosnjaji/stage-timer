@@ -1,5 +1,5 @@
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.1"
+  #define MyAppVersion "2.0.0"
 #endif
 #ifndef SourceDir
   #error SourceDir must point to the extracted Windows bundle

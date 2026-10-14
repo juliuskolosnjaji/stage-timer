@@ -21,7 +21,7 @@ export function validateSettings(input) {
     else if(k==='protocol'){if(!['off','sacn','artnet'].includes(v))throw Error(k);}
     else if(k==='logoPosition'){if(!['top-left','top-right','bottom-left','bottom-right','center'].includes(v))throw Error(k);}
     else if(k==='background'){if(!/^#[0-9a-f]{6}$/i.test(v))throw Error(k);}
-    else {const ranges={logoOpacity:[5,100],logoSize:[5,50],brightness:[10,100],amber:[0,359999],red:[0,359999],universe:[1,63999],address:[1,506]};if(!Number.isInteger(v)||v<ranges[k][0]||v>ranges[k][1])throw Error('Ungültig: '+k);}
+    else {const ranges={logoOpacity:[5,100],logoSize:[5,50],brightness:[10,100],amber:[0,359999],red:[0,359999],universe:[1,63999],address:[1,488]};if(!Number.isInteger(v)||v<ranges[k][0]||v>ranges[k][1])throw Error('Ungültig: '+k);}
     out[k]=v;
   } return out;
 }

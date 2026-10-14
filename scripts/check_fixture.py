@@ -1,4 +1,4 @@
-"""Check the packaged profile's references and exercise its values against the receiver."""
+"""Check the 25-channel GDTF package and exercise it against the receiver."""
 from pathlib import Path
 from zipfile import ZipFile
 import xml.etree.ElementTree as ET
@@ -6,7 +6,8 @@ import json
 import subprocess
 
 root = Path(__file__).resolve().parents[1]
-with ZipFile(root / 'fixtures/StageTimer@Stage_Timer@7CH_v1.0.gdtf') as archive:
+filename = 'StageTimer@Stage_Timer@25CH_v2.0.gdtf'
+with ZipFile(root / 'fixtures' / filename) as archive:
     assert archive.testzip() is None
     xml = archive.read('description.xml')
 assert xml == (root / 'fixtures/description.xml').read_bytes()
@@ -16,62 +17,38 @@ features = {g.get('Name')+'.'+f.get('Name') for g in fixture.findall('AttributeD
 assert all(a.get('Feature') in features for a in attrs.values())
 mode = fixture.find('DMXModes/DMXMode')
 channels = mode.findall('DMXChannels/DMXChannel')
-assert [int(c.get('Offset')) for c in channels] == list(range(1,8))
-assert len(attrs) == 7
+assert mode.get('Name') == '25CH'
+assert [int(c.get('Offset')) for c in channels] == list(range(1,26))
+assert len(attrs) == 25
 summary = []
-def raw(value):
-    n, size = value.split('/')
-    assert size == '1'
-    assert 0 <= int(n) <= 255
-    return int(n)
 for ch in channels:
     logical = ch.find('LogicalChannel')
+    function = logical.find('ChannelFunction')
     assert logical.get('Attribute') in attrs
-    assert logical.get('Master') == 'None'
-    assert logical.get('Snap') == 'Yes'
+    assert logical.get('Master') == 'None' and logical.get('Snap') == 'Yes'
     assert ch.get('Highlight') == 'None'
-    functions = logical.findall('ChannelFunction')
-    starts = [raw(f.get('DMXFrom')) for f in functions]
-    assert starts[0] == 0 and starts == sorted(set(starts))
-    initial = None
-    for i, f in enumerate(functions):
-        end = starts[i+1]-1 if i+1 < len(starts) else 255
-        assert starts[i] <= raw(f.get('Default')) <= end
-        assert f.get('Attribute') == logical.get('Attribute')
-        sets = [raw(s.get('DMXFrom')) for s in f.findall('ChannelSet')]
-        assert sets == sorted(set(sets))
-        assert all(starts[i] <= v <= end for v in sets)
-        ref = f"{ch.get('Geometry')}_{logical.get('Attribute')}.{logical.get('Attribute')}.{f.get('Name')}"
-        if ref == ch.get('InitialFunction'):
-            initial = raw(f.get('Default'))
-    assert initial is not None
-    summary.append({'attribute':logical.get('Attribute'),'default':initial,'sets':{s.get('Name'):raw(s.get('DMXFrom')) for s in ch.findall('.//ChannelSet')}})
-assert [s['default'] for s in summary] == [0,0,5,0,0,0,255]
+    assert ch.get('InitialFunction') == f"Body_{logical.get('Attribute')}.{logical.get('Attribute')}.{function.get('Name')}"
+    sets = {item.get('Name'):int(item.get('DMXFrom').split('/')[0]) for item in function.findall('ChannelSet')}
+    assert list(sets.values())[0] == 0
+    if logical.get('Attribute') != 'TimerBrightness': assert list(sets.values())[1] == 128
+    summary.append({'attribute':logical.get('Attribute'),'default':int(function.get('Default').split('/')[0]),'sets':sets})
+assert [item['default'] for item in summary] == [0]*24+[255]
+with ZipFile(root / 'fixtures' / 'StageTimer-grandMA3-USB.zip') as archive:
+    assert archive.testzip() is None
+    assert f'grandMA3/gma3_library/fixturetypes/{filename}' in archive.namelist()
 subprocess.run(['node','--input-type=module','-e',r'''
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Timer} from './timer.js';
 import {Receiver} from './dmx.js';
-const channels=JSON.parse(readFileSync(0,'utf8'));
-const t=new Timer({protocol:'artnet'}), receiver=new Receiver(t);
-const values=channels.map(c=>c.default);
-function send(){const b=Buffer.alloc(26);b.write('Art-Net\0');b.writeUInt16LE(0x5000,8);b.writeUInt16BE(14,10);b.writeUInt16BE(8,16);Buffer.from(values).copy(b,18);receiver.receive(b,'127.0.0.1');}
-send();assert.equal(t.running,false);assert.equal(t.settings.brightness,100);assert.equal(t.mode,'timer');
-for(const [slot,max] of [[1,99],[2,59],[3,59]]){
- for(let n=0;n<=max;n++){
-  values[1]=0;values[2]=0;values[3]=1;values[slot]=channels[slot].sets[String(n).padStart(2,'0')];
-  values[4]=channels[4].sets.Ready;send();values[4]=channels[4].sets['Load Time'];send();
-  const expected=values[1]*3600+values[2]*60+values[3];if(expected)assert.equal(t.duration,expected);
- }
-}
-values[0]=channels[0].sets['Start Resume'];send();assert.equal(t.running,true);
-const deadline=t.deadline;send();assert.equal(t.deadline,deadline);
-values[0]=channels[0].sets.Pause;send();assert.equal(t.running,false);
-values[0]=channels[0].sets.Reset;send();assert.equal(t.seconds(),t.duration);
-values[0]=channels[0].sets.Neutral;send();
-for(const [label,mode] of [['Clock','clock'],['Black','black'],['Test','test'],['Timer','timer']]){
- values[5]=channels[5].sets[label];send();assert.equal(t.mode,mode);
-}
-values[0]=channels[0].sets['Black Override'];send();assert.equal(t.mode,'black');
-console.log('GDTF ZIP, references, defaults, 7-channel footprint, all time sets and receiver commands verified.');
+const channels=JSON.parse(readFileSync(0,'utf8')), values=channels.map(c=>c.default);values.push(0);
+const timer=new Timer({protocol:'artnet'}), receiver=new Receiver(timer);
+function send(){const b=Buffer.alloc(18+values.length);b.write('Art-Net\0');b.writeUInt16LE(0x5000,8);b.writeUInt16BE(14,10);b.writeUInt16BE(values.length,16);Buffer.from(values).copy(b,18);receiver.receive(b,'127.0.0.1');}
+function pulse(index){values[index]=channels[index].sets.Trigger;send();values[index]=channels[index].sets.Ready;send();}
+send();assert.equal(timer.running,false);assert.equal(timer.settings.brightness,100);
+for(let i=0;i<10;i++){pulse(i);assert.equal(timer.duration,(i+1)*300);}
+pulse(12);assert.equal(timer.running,true);pulse(13);assert.equal(timer.running,false);pulse(14);assert.equal(timer.seconds(),timer.duration);
+for(const [index,mode] of [[19,'timer'],[20,'clock'],[21,'black'],[22,'test']]){pulse(index);assert.equal(timer.mode,mode);}
+values[23]=channels[23].sets.On;send();assert.equal(timer.settings.sounds,true);
+console.log('GDTF ZIP, USB package, 25-channel footprint, defaults and receiver actions verified.');
 '''],input=json.dumps(summary),text=True,cwd=root,check=True)

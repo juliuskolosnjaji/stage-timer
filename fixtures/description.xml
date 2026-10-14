@@ -1,21 +1,41 @@
 <?xml version='1.0' encoding='utf-8'?>
 <GDTF DataVersion="1.2">
-  <FixtureType Name="Stage Timer" ShortName="StageTimer" LongName="Stage Timer Network Countdown" Manufacturer="StageTimer" Description="7-channel countdown control via sACN or Art-Net. Use zero fade for control cues. Load and commands are edge-triggered." FixtureTypeID="820c4542-6847-4c49-9357-cfc31e170d04" CanHaveChildren="No">
+  <FixtureType Name="Stage Timer" ShortName="StageTimer" LongName="Stage Timer Network Countdown" Manufacturer="StageTimer" Description="25-channel countdown control via sACN or Art-Net. Button channels trigger at DMX 128 and require zero fade." FixtureTypeID="820c4542-6847-4c49-9357-cfc31e170d04" CanHaveChildren="No">
     <AttributeDefinitions>
       <FeatureGroups>
         <FeatureGroup Name="Control" Pretty="Control">
-          <Feature Name="TimerTransport" />
           <Feature Name="TimerDuration" />
+          <Feature Name="TimerCorrection" />
+          <Feature Name="TimerTransport" />
           <Feature Name="TimerOutput" />
+          <Feature Name="TimerAudio" />
         </FeatureGroup>
       </FeatureGroups>
       <Attributes>
-        <Attribute Name="TimerCommand" Pretty="Command" Feature="Control.TimerTransport" PhysicalUnit="None" />
-        <Attribute Name="TimerHours" Pretty="Hours" Feature="Control.TimerDuration" PhysicalUnit="None" />
-        <Attribute Name="TimerMinutes" Pretty="Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
-        <Attribute Name="TimerSeconds" Pretty="Seconds" Feature="Control.TimerDuration" PhysicalUnit="None" />
-        <Attribute Name="TimerLoad" Pretty="Load Time" Feature="Control.TimerTransport" PhysicalUnit="None" />
-        <Attribute Name="TimerOutput" Pretty="Output" Feature="Control.TimerOutput" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset05" Pretty="5 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset10" Pretty="10 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset15" Pretty="15 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset20" Pretty="20 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset25" Pretty="25 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset30" Pretty="30 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset35" Pretty="35 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset40" Pretty="40 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset45" Pretty="45 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPreset50" Pretty="50 Minutes" Feature="Control.TimerDuration" PhysicalUnit="None" />
+        <Attribute Name="TimerPlus5" Pretty="+5 Minutes" Feature="Control.TimerCorrection" PhysicalUnit="None" />
+        <Attribute Name="TimerMinus5" Pretty="-5 Minutes" Feature="Control.TimerCorrection" PhysicalUnit="None" />
+        <Attribute Name="TimerStart" Pretty="Start" Feature="Control.TimerTransport" PhysicalUnit="None" />
+        <Attribute Name="TimerPause" Pretty="Pause" Feature="Control.TimerTransport" PhysicalUnit="None" />
+        <Attribute Name="TimerReset" Pretty="Reset" Feature="Control.TimerTransport" PhysicalUnit="None" />
+        <Attribute Name="TimerPlus1" Pretty="+1 Minute" Feature="Control.TimerCorrection" PhysicalUnit="None" />
+        <Attribute Name="TimerMinus1" Pretty="-1 Minute" Feature="Control.TimerCorrection" PhysicalUnit="None" />
+        <Attribute Name="TimerPlus2" Pretty="+2 Minutes" Feature="Control.TimerCorrection" PhysicalUnit="None" />
+        <Attribute Name="TimerMinus2" Pretty="-2 Minutes" Feature="Control.TimerCorrection" PhysicalUnit="None" />
+        <Attribute Name="OutputTimer" Pretty="Timer Output" Feature="Control.TimerOutput" PhysicalUnit="None" />
+        <Attribute Name="OutputClock" Pretty="Clock Output" Feature="Control.TimerOutput" PhysicalUnit="None" />
+        <Attribute Name="OutputBlack" Pretty="Black Output" Feature="Control.TimerOutput" PhysicalUnit="None" />
+        <Attribute Name="OutputTest" Pretty="Test Output" Feature="Control.TimerOutput" PhysicalUnit="None" />
+        <Attribute Name="TimerSound" Pretty="End Sound" Feature="Control.TimerAudio" PhysicalUnit="None" />
         <Attribute Name="TimerBrightness" Pretty="Brightness" Feature="Control.TimerOutput" PhysicalUnit="Percent" />
       </Attributes>
     </AttributeDefinitions>
@@ -26,291 +46,204 @@
       <Geometry Name="Body" Model="Screen" Position="{1,0,0,0}{0,1,0,0}{0,0,1,0}{0,0,0,1}" />
     </Geometries>
     <DMXModes>
-      <DMXMode Name="7CH" Geometry="Body" Description="Network timer - 7 consecutive 8-bit channels">
+      <DMXMode Name="25CH" Geometry="Body" Description="Network timer - 25 consecutive 8-bit channels">
         <DMXChannels>
-          <DMXChannel DMXBreak="1" Offset="1" Geometry="Body" Highlight="None" InitialFunction="Body_TimerCommand.TimerCommand.TimerCommand">
-            <LogicalChannel Attribute="TimerCommand" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
-              <ChannelFunction Name="TimerCommand" Attribute="TimerCommand" OriginalAttribute="Command" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="255" RealFade="0" RealAcceleration="0">
-                <ChannelSet Name="Neutral" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
-                <ChannelSet Name="Start Resume" DMXFrom="32/1" PhysicalFrom="32" PhysicalTo="32" />
-                <ChannelSet Name="Pause" DMXFrom="96/1" PhysicalFrom="96" PhysicalTo="96" />
-                <ChannelSet Name="Reset" DMXFrom="160/1" PhysicalFrom="160" PhysicalTo="160" />
-                <ChannelSet Name="Black Override" DMXFrom="224/1" PhysicalFrom="224" PhysicalTo="224" />
-              </ChannelFunction>
-            </LogicalChannel>
-          </DMXChannel>
-          <DMXChannel DMXBreak="1" Offset="2" Geometry="Body" Highlight="None" InitialFunction="Body_TimerHours.TimerHours.TimerHours">
-            <LogicalChannel Attribute="TimerHours" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
-              <ChannelFunction Name="TimerHours" Attribute="TimerHours" OriginalAttribute="Hours" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="99" RealFade="0" RealAcceleration="0">
-                <ChannelSet Name="00" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
-                <ChannelSet Name="01" DMXFrom="1/1" PhysicalFrom="1" PhysicalTo="1" />
-                <ChannelSet Name="02" DMXFrom="2/1" PhysicalFrom="2" PhysicalTo="2" />
-                <ChannelSet Name="03" DMXFrom="3/1" PhysicalFrom="3" PhysicalTo="3" />
-                <ChannelSet Name="04" DMXFrom="4/1" PhysicalFrom="4" PhysicalTo="4" />
-                <ChannelSet Name="05" DMXFrom="5/1" PhysicalFrom="5" PhysicalTo="5" />
-                <ChannelSet Name="06" DMXFrom="6/1" PhysicalFrom="6" PhysicalTo="6" />
-                <ChannelSet Name="07" DMXFrom="7/1" PhysicalFrom="7" PhysicalTo="7" />
-                <ChannelSet Name="08" DMXFrom="8/1" PhysicalFrom="8" PhysicalTo="8" />
-                <ChannelSet Name="09" DMXFrom="9/1" PhysicalFrom="9" PhysicalTo="9" />
-                <ChannelSet Name="10" DMXFrom="10/1" PhysicalFrom="10" PhysicalTo="10" />
-                <ChannelSet Name="11" DMXFrom="11/1" PhysicalFrom="11" PhysicalTo="11" />
-                <ChannelSet Name="12" DMXFrom="12/1" PhysicalFrom="12" PhysicalTo="12" />
-                <ChannelSet Name="13" DMXFrom="13/1" PhysicalFrom="13" PhysicalTo="13" />
-                <ChannelSet Name="14" DMXFrom="14/1" PhysicalFrom="14" PhysicalTo="14" />
-                <ChannelSet Name="15" DMXFrom="15/1" PhysicalFrom="15" PhysicalTo="15" />
-                <ChannelSet Name="16" DMXFrom="16/1" PhysicalFrom="16" PhysicalTo="16" />
-                <ChannelSet Name="17" DMXFrom="17/1" PhysicalFrom="17" PhysicalTo="17" />
-                <ChannelSet Name="18" DMXFrom="18/1" PhysicalFrom="18" PhysicalTo="18" />
-                <ChannelSet Name="19" DMXFrom="19/1" PhysicalFrom="19" PhysicalTo="19" />
-                <ChannelSet Name="20" DMXFrom="20/1" PhysicalFrom="20" PhysicalTo="20" />
-                <ChannelSet Name="21" DMXFrom="21/1" PhysicalFrom="21" PhysicalTo="21" />
-                <ChannelSet Name="22" DMXFrom="22/1" PhysicalFrom="22" PhysicalTo="22" />
-                <ChannelSet Name="23" DMXFrom="23/1" PhysicalFrom="23" PhysicalTo="23" />
-                <ChannelSet Name="24" DMXFrom="24/1" PhysicalFrom="24" PhysicalTo="24" />
-                <ChannelSet Name="25" DMXFrom="25/1" PhysicalFrom="25" PhysicalTo="25" />
-                <ChannelSet Name="26" DMXFrom="26/1" PhysicalFrom="26" PhysicalTo="26" />
-                <ChannelSet Name="27" DMXFrom="27/1" PhysicalFrom="27" PhysicalTo="27" />
-                <ChannelSet Name="28" DMXFrom="28/1" PhysicalFrom="28" PhysicalTo="28" />
-                <ChannelSet Name="29" DMXFrom="29/1" PhysicalFrom="29" PhysicalTo="29" />
-                <ChannelSet Name="30" DMXFrom="30/1" PhysicalFrom="30" PhysicalTo="30" />
-                <ChannelSet Name="31" DMXFrom="31/1" PhysicalFrom="31" PhysicalTo="31" />
-                <ChannelSet Name="32" DMXFrom="32/1" PhysicalFrom="32" PhysicalTo="32" />
-                <ChannelSet Name="33" DMXFrom="33/1" PhysicalFrom="33" PhysicalTo="33" />
-                <ChannelSet Name="34" DMXFrom="34/1" PhysicalFrom="34" PhysicalTo="34" />
-                <ChannelSet Name="35" DMXFrom="35/1" PhysicalFrom="35" PhysicalTo="35" />
-                <ChannelSet Name="36" DMXFrom="36/1" PhysicalFrom="36" PhysicalTo="36" />
-                <ChannelSet Name="37" DMXFrom="37/1" PhysicalFrom="37" PhysicalTo="37" />
-                <ChannelSet Name="38" DMXFrom="38/1" PhysicalFrom="38" PhysicalTo="38" />
-                <ChannelSet Name="39" DMXFrom="39/1" PhysicalFrom="39" PhysicalTo="39" />
-                <ChannelSet Name="40" DMXFrom="40/1" PhysicalFrom="40" PhysicalTo="40" />
-                <ChannelSet Name="41" DMXFrom="41/1" PhysicalFrom="41" PhysicalTo="41" />
-                <ChannelSet Name="42" DMXFrom="42/1" PhysicalFrom="42" PhysicalTo="42" />
-                <ChannelSet Name="43" DMXFrom="43/1" PhysicalFrom="43" PhysicalTo="43" />
-                <ChannelSet Name="44" DMXFrom="44/1" PhysicalFrom="44" PhysicalTo="44" />
-                <ChannelSet Name="45" DMXFrom="45/1" PhysicalFrom="45" PhysicalTo="45" />
-                <ChannelSet Name="46" DMXFrom="46/1" PhysicalFrom="46" PhysicalTo="46" />
-                <ChannelSet Name="47" DMXFrom="47/1" PhysicalFrom="47" PhysicalTo="47" />
-                <ChannelSet Name="48" DMXFrom="48/1" PhysicalFrom="48" PhysicalTo="48" />
-                <ChannelSet Name="49" DMXFrom="49/1" PhysicalFrom="49" PhysicalTo="49" />
-                <ChannelSet Name="50" DMXFrom="50/1" PhysicalFrom="50" PhysicalTo="50" />
-                <ChannelSet Name="51" DMXFrom="51/1" PhysicalFrom="51" PhysicalTo="51" />
-                <ChannelSet Name="52" DMXFrom="52/1" PhysicalFrom="52" PhysicalTo="52" />
-                <ChannelSet Name="53" DMXFrom="53/1" PhysicalFrom="53" PhysicalTo="53" />
-                <ChannelSet Name="54" DMXFrom="54/1" PhysicalFrom="54" PhysicalTo="54" />
-                <ChannelSet Name="55" DMXFrom="55/1" PhysicalFrom="55" PhysicalTo="55" />
-                <ChannelSet Name="56" DMXFrom="56/1" PhysicalFrom="56" PhysicalTo="56" />
-                <ChannelSet Name="57" DMXFrom="57/1" PhysicalFrom="57" PhysicalTo="57" />
-                <ChannelSet Name="58" DMXFrom="58/1" PhysicalFrom="58" PhysicalTo="58" />
-                <ChannelSet Name="59" DMXFrom="59/1" PhysicalFrom="59" PhysicalTo="59" />
-                <ChannelSet Name="60" DMXFrom="60/1" PhysicalFrom="60" PhysicalTo="60" />
-                <ChannelSet Name="61" DMXFrom="61/1" PhysicalFrom="61" PhysicalTo="61" />
-                <ChannelSet Name="62" DMXFrom="62/1" PhysicalFrom="62" PhysicalTo="62" />
-                <ChannelSet Name="63" DMXFrom="63/1" PhysicalFrom="63" PhysicalTo="63" />
-                <ChannelSet Name="64" DMXFrom="64/1" PhysicalFrom="64" PhysicalTo="64" />
-                <ChannelSet Name="65" DMXFrom="65/1" PhysicalFrom="65" PhysicalTo="65" />
-                <ChannelSet Name="66" DMXFrom="66/1" PhysicalFrom="66" PhysicalTo="66" />
-                <ChannelSet Name="67" DMXFrom="67/1" PhysicalFrom="67" PhysicalTo="67" />
-                <ChannelSet Name="68" DMXFrom="68/1" PhysicalFrom="68" PhysicalTo="68" />
-                <ChannelSet Name="69" DMXFrom="69/1" PhysicalFrom="69" PhysicalTo="69" />
-                <ChannelSet Name="70" DMXFrom="70/1" PhysicalFrom="70" PhysicalTo="70" />
-                <ChannelSet Name="71" DMXFrom="71/1" PhysicalFrom="71" PhysicalTo="71" />
-                <ChannelSet Name="72" DMXFrom="72/1" PhysicalFrom="72" PhysicalTo="72" />
-                <ChannelSet Name="73" DMXFrom="73/1" PhysicalFrom="73" PhysicalTo="73" />
-                <ChannelSet Name="74" DMXFrom="74/1" PhysicalFrom="74" PhysicalTo="74" />
-                <ChannelSet Name="75" DMXFrom="75/1" PhysicalFrom="75" PhysicalTo="75" />
-                <ChannelSet Name="76" DMXFrom="76/1" PhysicalFrom="76" PhysicalTo="76" />
-                <ChannelSet Name="77" DMXFrom="77/1" PhysicalFrom="77" PhysicalTo="77" />
-                <ChannelSet Name="78" DMXFrom="78/1" PhysicalFrom="78" PhysicalTo="78" />
-                <ChannelSet Name="79" DMXFrom="79/1" PhysicalFrom="79" PhysicalTo="79" />
-                <ChannelSet Name="80" DMXFrom="80/1" PhysicalFrom="80" PhysicalTo="80" />
-                <ChannelSet Name="81" DMXFrom="81/1" PhysicalFrom="81" PhysicalTo="81" />
-                <ChannelSet Name="82" DMXFrom="82/1" PhysicalFrom="82" PhysicalTo="82" />
-                <ChannelSet Name="83" DMXFrom="83/1" PhysicalFrom="83" PhysicalTo="83" />
-                <ChannelSet Name="84" DMXFrom="84/1" PhysicalFrom="84" PhysicalTo="84" />
-                <ChannelSet Name="85" DMXFrom="85/1" PhysicalFrom="85" PhysicalTo="85" />
-                <ChannelSet Name="86" DMXFrom="86/1" PhysicalFrom="86" PhysicalTo="86" />
-                <ChannelSet Name="87" DMXFrom="87/1" PhysicalFrom="87" PhysicalTo="87" />
-                <ChannelSet Name="88" DMXFrom="88/1" PhysicalFrom="88" PhysicalTo="88" />
-                <ChannelSet Name="89" DMXFrom="89/1" PhysicalFrom="89" PhysicalTo="89" />
-                <ChannelSet Name="90" DMXFrom="90/1" PhysicalFrom="90" PhysicalTo="90" />
-                <ChannelSet Name="91" DMXFrom="91/1" PhysicalFrom="91" PhysicalTo="91" />
-                <ChannelSet Name="92" DMXFrom="92/1" PhysicalFrom="92" PhysicalTo="92" />
-                <ChannelSet Name="93" DMXFrom="93/1" PhysicalFrom="93" PhysicalTo="93" />
-                <ChannelSet Name="94" DMXFrom="94/1" PhysicalFrom="94" PhysicalTo="94" />
-                <ChannelSet Name="95" DMXFrom="95/1" PhysicalFrom="95" PhysicalTo="95" />
-                <ChannelSet Name="96" DMXFrom="96/1" PhysicalFrom="96" PhysicalTo="96" />
-                <ChannelSet Name="97" DMXFrom="97/1" PhysicalFrom="97" PhysicalTo="97" />
-                <ChannelSet Name="98" DMXFrom="98/1" PhysicalFrom="98" PhysicalTo="98" />
-                <ChannelSet Name="99" DMXFrom="99/1" PhysicalFrom="99" PhysicalTo="99" />
-              </ChannelFunction>
-              <ChannelFunction Name="TimerHoursClamped" Attribute="TimerHours" OriginalAttribute="Hours" DMXFrom="100/1" Default="100/1" PhysicalFrom="99" PhysicalTo="99">
-                <ChannelSet Name="Clamped to 99" DMXFrom="100/1" PhysicalFrom="99" PhysicalTo="99" />
-              </ChannelFunction>
-            </LogicalChannel>
-          </DMXChannel>
-          <DMXChannel DMXBreak="1" Offset="3" Geometry="Body" Highlight="None" InitialFunction="Body_TimerMinutes.TimerMinutes.TimerMinutes">
-            <LogicalChannel Attribute="TimerMinutes" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
-              <ChannelFunction Name="TimerMinutes" Attribute="TimerMinutes" OriginalAttribute="Minutes" DMXFrom="0/1" Default="5/1" PhysicalFrom="0" PhysicalTo="59" RealFade="0" RealAcceleration="0">
-                <ChannelSet Name="00" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
-                <ChannelSet Name="01" DMXFrom="1/1" PhysicalFrom="1" PhysicalTo="1" />
-                <ChannelSet Name="02" DMXFrom="2/1" PhysicalFrom="2" PhysicalTo="2" />
-                <ChannelSet Name="03" DMXFrom="3/1" PhysicalFrom="3" PhysicalTo="3" />
-                <ChannelSet Name="04" DMXFrom="4/1" PhysicalFrom="4" PhysicalTo="4" />
-                <ChannelSet Name="05" DMXFrom="5/1" PhysicalFrom="5" PhysicalTo="5" />
-                <ChannelSet Name="06" DMXFrom="6/1" PhysicalFrom="6" PhysicalTo="6" />
-                <ChannelSet Name="07" DMXFrom="7/1" PhysicalFrom="7" PhysicalTo="7" />
-                <ChannelSet Name="08" DMXFrom="8/1" PhysicalFrom="8" PhysicalTo="8" />
-                <ChannelSet Name="09" DMXFrom="9/1" PhysicalFrom="9" PhysicalTo="9" />
-                <ChannelSet Name="10" DMXFrom="10/1" PhysicalFrom="10" PhysicalTo="10" />
-                <ChannelSet Name="11" DMXFrom="11/1" PhysicalFrom="11" PhysicalTo="11" />
-                <ChannelSet Name="12" DMXFrom="12/1" PhysicalFrom="12" PhysicalTo="12" />
-                <ChannelSet Name="13" DMXFrom="13/1" PhysicalFrom="13" PhysicalTo="13" />
-                <ChannelSet Name="14" DMXFrom="14/1" PhysicalFrom="14" PhysicalTo="14" />
-                <ChannelSet Name="15" DMXFrom="15/1" PhysicalFrom="15" PhysicalTo="15" />
-                <ChannelSet Name="16" DMXFrom="16/1" PhysicalFrom="16" PhysicalTo="16" />
-                <ChannelSet Name="17" DMXFrom="17/1" PhysicalFrom="17" PhysicalTo="17" />
-                <ChannelSet Name="18" DMXFrom="18/1" PhysicalFrom="18" PhysicalTo="18" />
-                <ChannelSet Name="19" DMXFrom="19/1" PhysicalFrom="19" PhysicalTo="19" />
-                <ChannelSet Name="20" DMXFrom="20/1" PhysicalFrom="20" PhysicalTo="20" />
-                <ChannelSet Name="21" DMXFrom="21/1" PhysicalFrom="21" PhysicalTo="21" />
-                <ChannelSet Name="22" DMXFrom="22/1" PhysicalFrom="22" PhysicalTo="22" />
-                <ChannelSet Name="23" DMXFrom="23/1" PhysicalFrom="23" PhysicalTo="23" />
-                <ChannelSet Name="24" DMXFrom="24/1" PhysicalFrom="24" PhysicalTo="24" />
-                <ChannelSet Name="25" DMXFrom="25/1" PhysicalFrom="25" PhysicalTo="25" />
-                <ChannelSet Name="26" DMXFrom="26/1" PhysicalFrom="26" PhysicalTo="26" />
-                <ChannelSet Name="27" DMXFrom="27/1" PhysicalFrom="27" PhysicalTo="27" />
-                <ChannelSet Name="28" DMXFrom="28/1" PhysicalFrom="28" PhysicalTo="28" />
-                <ChannelSet Name="29" DMXFrom="29/1" PhysicalFrom="29" PhysicalTo="29" />
-                <ChannelSet Name="30" DMXFrom="30/1" PhysicalFrom="30" PhysicalTo="30" />
-                <ChannelSet Name="31" DMXFrom="31/1" PhysicalFrom="31" PhysicalTo="31" />
-                <ChannelSet Name="32" DMXFrom="32/1" PhysicalFrom="32" PhysicalTo="32" />
-                <ChannelSet Name="33" DMXFrom="33/1" PhysicalFrom="33" PhysicalTo="33" />
-                <ChannelSet Name="34" DMXFrom="34/1" PhysicalFrom="34" PhysicalTo="34" />
-                <ChannelSet Name="35" DMXFrom="35/1" PhysicalFrom="35" PhysicalTo="35" />
-                <ChannelSet Name="36" DMXFrom="36/1" PhysicalFrom="36" PhysicalTo="36" />
-                <ChannelSet Name="37" DMXFrom="37/1" PhysicalFrom="37" PhysicalTo="37" />
-                <ChannelSet Name="38" DMXFrom="38/1" PhysicalFrom="38" PhysicalTo="38" />
-                <ChannelSet Name="39" DMXFrom="39/1" PhysicalFrom="39" PhysicalTo="39" />
-                <ChannelSet Name="40" DMXFrom="40/1" PhysicalFrom="40" PhysicalTo="40" />
-                <ChannelSet Name="41" DMXFrom="41/1" PhysicalFrom="41" PhysicalTo="41" />
-                <ChannelSet Name="42" DMXFrom="42/1" PhysicalFrom="42" PhysicalTo="42" />
-                <ChannelSet Name="43" DMXFrom="43/1" PhysicalFrom="43" PhysicalTo="43" />
-                <ChannelSet Name="44" DMXFrom="44/1" PhysicalFrom="44" PhysicalTo="44" />
-                <ChannelSet Name="45" DMXFrom="45/1" PhysicalFrom="45" PhysicalTo="45" />
-                <ChannelSet Name="46" DMXFrom="46/1" PhysicalFrom="46" PhysicalTo="46" />
-                <ChannelSet Name="47" DMXFrom="47/1" PhysicalFrom="47" PhysicalTo="47" />
-                <ChannelSet Name="48" DMXFrom="48/1" PhysicalFrom="48" PhysicalTo="48" />
-                <ChannelSet Name="49" DMXFrom="49/1" PhysicalFrom="49" PhysicalTo="49" />
-                <ChannelSet Name="50" DMXFrom="50/1" PhysicalFrom="50" PhysicalTo="50" />
-                <ChannelSet Name="51" DMXFrom="51/1" PhysicalFrom="51" PhysicalTo="51" />
-                <ChannelSet Name="52" DMXFrom="52/1" PhysicalFrom="52" PhysicalTo="52" />
-                <ChannelSet Name="53" DMXFrom="53/1" PhysicalFrom="53" PhysicalTo="53" />
-                <ChannelSet Name="54" DMXFrom="54/1" PhysicalFrom="54" PhysicalTo="54" />
-                <ChannelSet Name="55" DMXFrom="55/1" PhysicalFrom="55" PhysicalTo="55" />
-                <ChannelSet Name="56" DMXFrom="56/1" PhysicalFrom="56" PhysicalTo="56" />
-                <ChannelSet Name="57" DMXFrom="57/1" PhysicalFrom="57" PhysicalTo="57" />
-                <ChannelSet Name="58" DMXFrom="58/1" PhysicalFrom="58" PhysicalTo="58" />
-                <ChannelSet Name="59" DMXFrom="59/1" PhysicalFrom="59" PhysicalTo="59" />
-              </ChannelFunction>
-              <ChannelFunction Name="TimerMinutesClamped" Attribute="TimerMinutes" OriginalAttribute="Minutes" DMXFrom="60/1" Default="60/1" PhysicalFrom="59" PhysicalTo="59">
-                <ChannelSet Name="Clamped to 59" DMXFrom="60/1" PhysicalFrom="59" PhysicalTo="59" />
-              </ChannelFunction>
-            </LogicalChannel>
-          </DMXChannel>
-          <DMXChannel DMXBreak="1" Offset="4" Geometry="Body" Highlight="None" InitialFunction="Body_TimerSeconds.TimerSeconds.TimerSeconds">
-            <LogicalChannel Attribute="TimerSeconds" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
-              <ChannelFunction Name="TimerSeconds" Attribute="TimerSeconds" OriginalAttribute="Seconds" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="59" RealFade="0" RealAcceleration="0">
-                <ChannelSet Name="00" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
-                <ChannelSet Name="01" DMXFrom="1/1" PhysicalFrom="1" PhysicalTo="1" />
-                <ChannelSet Name="02" DMXFrom="2/1" PhysicalFrom="2" PhysicalTo="2" />
-                <ChannelSet Name="03" DMXFrom="3/1" PhysicalFrom="3" PhysicalTo="3" />
-                <ChannelSet Name="04" DMXFrom="4/1" PhysicalFrom="4" PhysicalTo="4" />
-                <ChannelSet Name="05" DMXFrom="5/1" PhysicalFrom="5" PhysicalTo="5" />
-                <ChannelSet Name="06" DMXFrom="6/1" PhysicalFrom="6" PhysicalTo="6" />
-                <ChannelSet Name="07" DMXFrom="7/1" PhysicalFrom="7" PhysicalTo="7" />
-                <ChannelSet Name="08" DMXFrom="8/1" PhysicalFrom="8" PhysicalTo="8" />
-                <ChannelSet Name="09" DMXFrom="9/1" PhysicalFrom="9" PhysicalTo="9" />
-                <ChannelSet Name="10" DMXFrom="10/1" PhysicalFrom="10" PhysicalTo="10" />
-                <ChannelSet Name="11" DMXFrom="11/1" PhysicalFrom="11" PhysicalTo="11" />
-                <ChannelSet Name="12" DMXFrom="12/1" PhysicalFrom="12" PhysicalTo="12" />
-                <ChannelSet Name="13" DMXFrom="13/1" PhysicalFrom="13" PhysicalTo="13" />
-                <ChannelSet Name="14" DMXFrom="14/1" PhysicalFrom="14" PhysicalTo="14" />
-                <ChannelSet Name="15" DMXFrom="15/1" PhysicalFrom="15" PhysicalTo="15" />
-                <ChannelSet Name="16" DMXFrom="16/1" PhysicalFrom="16" PhysicalTo="16" />
-                <ChannelSet Name="17" DMXFrom="17/1" PhysicalFrom="17" PhysicalTo="17" />
-                <ChannelSet Name="18" DMXFrom="18/1" PhysicalFrom="18" PhysicalTo="18" />
-                <ChannelSet Name="19" DMXFrom="19/1" PhysicalFrom="19" PhysicalTo="19" />
-                <ChannelSet Name="20" DMXFrom="20/1" PhysicalFrom="20" PhysicalTo="20" />
-                <ChannelSet Name="21" DMXFrom="21/1" PhysicalFrom="21" PhysicalTo="21" />
-                <ChannelSet Name="22" DMXFrom="22/1" PhysicalFrom="22" PhysicalTo="22" />
-                <ChannelSet Name="23" DMXFrom="23/1" PhysicalFrom="23" PhysicalTo="23" />
-                <ChannelSet Name="24" DMXFrom="24/1" PhysicalFrom="24" PhysicalTo="24" />
-                <ChannelSet Name="25" DMXFrom="25/1" PhysicalFrom="25" PhysicalTo="25" />
-                <ChannelSet Name="26" DMXFrom="26/1" PhysicalFrom="26" PhysicalTo="26" />
-                <ChannelSet Name="27" DMXFrom="27/1" PhysicalFrom="27" PhysicalTo="27" />
-                <ChannelSet Name="28" DMXFrom="28/1" PhysicalFrom="28" PhysicalTo="28" />
-                <ChannelSet Name="29" DMXFrom="29/1" PhysicalFrom="29" PhysicalTo="29" />
-                <ChannelSet Name="30" DMXFrom="30/1" PhysicalFrom="30" PhysicalTo="30" />
-                <ChannelSet Name="31" DMXFrom="31/1" PhysicalFrom="31" PhysicalTo="31" />
-                <ChannelSet Name="32" DMXFrom="32/1" PhysicalFrom="32" PhysicalTo="32" />
-                <ChannelSet Name="33" DMXFrom="33/1" PhysicalFrom="33" PhysicalTo="33" />
-                <ChannelSet Name="34" DMXFrom="34/1" PhysicalFrom="34" PhysicalTo="34" />
-                <ChannelSet Name="35" DMXFrom="35/1" PhysicalFrom="35" PhysicalTo="35" />
-                <ChannelSet Name="36" DMXFrom="36/1" PhysicalFrom="36" PhysicalTo="36" />
-                <ChannelSet Name="37" DMXFrom="37/1" PhysicalFrom="37" PhysicalTo="37" />
-                <ChannelSet Name="38" DMXFrom="38/1" PhysicalFrom="38" PhysicalTo="38" />
-                <ChannelSet Name="39" DMXFrom="39/1" PhysicalFrom="39" PhysicalTo="39" />
-                <ChannelSet Name="40" DMXFrom="40/1" PhysicalFrom="40" PhysicalTo="40" />
-                <ChannelSet Name="41" DMXFrom="41/1" PhysicalFrom="41" PhysicalTo="41" />
-                <ChannelSet Name="42" DMXFrom="42/1" PhysicalFrom="42" PhysicalTo="42" />
-                <ChannelSet Name="43" DMXFrom="43/1" PhysicalFrom="43" PhysicalTo="43" />
-                <ChannelSet Name="44" DMXFrom="44/1" PhysicalFrom="44" PhysicalTo="44" />
-                <ChannelSet Name="45" DMXFrom="45/1" PhysicalFrom="45" PhysicalTo="45" />
-                <ChannelSet Name="46" DMXFrom="46/1" PhysicalFrom="46" PhysicalTo="46" />
-                <ChannelSet Name="47" DMXFrom="47/1" PhysicalFrom="47" PhysicalTo="47" />
-                <ChannelSet Name="48" DMXFrom="48/1" PhysicalFrom="48" PhysicalTo="48" />
-                <ChannelSet Name="49" DMXFrom="49/1" PhysicalFrom="49" PhysicalTo="49" />
-                <ChannelSet Name="50" DMXFrom="50/1" PhysicalFrom="50" PhysicalTo="50" />
-                <ChannelSet Name="51" DMXFrom="51/1" PhysicalFrom="51" PhysicalTo="51" />
-                <ChannelSet Name="52" DMXFrom="52/1" PhysicalFrom="52" PhysicalTo="52" />
-                <ChannelSet Name="53" DMXFrom="53/1" PhysicalFrom="53" PhysicalTo="53" />
-                <ChannelSet Name="54" DMXFrom="54/1" PhysicalFrom="54" PhysicalTo="54" />
-                <ChannelSet Name="55" DMXFrom="55/1" PhysicalFrom="55" PhysicalTo="55" />
-                <ChannelSet Name="56" DMXFrom="56/1" PhysicalFrom="56" PhysicalTo="56" />
-                <ChannelSet Name="57" DMXFrom="57/1" PhysicalFrom="57" PhysicalTo="57" />
-                <ChannelSet Name="58" DMXFrom="58/1" PhysicalFrom="58" PhysicalTo="58" />
-                <ChannelSet Name="59" DMXFrom="59/1" PhysicalFrom="59" PhysicalTo="59" />
-              </ChannelFunction>
-              <ChannelFunction Name="TimerSecondsClamped" Attribute="TimerSeconds" OriginalAttribute="Seconds" DMXFrom="60/1" Default="60/1" PhysicalFrom="59" PhysicalTo="59">
-                <ChannelSet Name="Clamped to 59" DMXFrom="60/1" PhysicalFrom="59" PhysicalTo="59" />
-              </ChannelFunction>
-            </LogicalChannel>
-          </DMXChannel>
-          <DMXChannel DMXBreak="1" Offset="5" Geometry="Body" Highlight="None" InitialFunction="Body_TimerLoad.TimerLoad.TimerLoad">
-            <LogicalChannel Attribute="TimerLoad" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
-              <ChannelFunction Name="TimerLoad" Attribute="TimerLoad" OriginalAttribute="Load Time" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="255" RealFade="0" RealAcceleration="0">
+          <DMXChannel DMXBreak="1" Offset="1" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset05.TimerPreset05.TimerPreset05">
+            <LogicalChannel Attribute="TimerPreset05" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset05" Attribute="TimerPreset05" OriginalAttribute="5 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
                 <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
-                <ChannelSet Name="Load Time" DMXFrom="128/1" PhysicalFrom="128" PhysicalTo="128" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
               </ChannelFunction>
             </LogicalChannel>
           </DMXChannel>
-          <DMXChannel DMXBreak="1" Offset="6" Geometry="Body" Highlight="None" InitialFunction="Body_TimerOutput.TimerOutput.TimerOutput">
-            <LogicalChannel Attribute="TimerOutput" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
-              <ChannelFunction Name="TimerOutput" Attribute="TimerOutput" OriginalAttribute="Output" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="255" RealFade="0" RealAcceleration="0">
-                <ChannelSet Name="Timer" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
-                <ChannelSet Name="Clock" DMXFrom="64/1" PhysicalFrom="64" PhysicalTo="64" />
-                <ChannelSet Name="Black" DMXFrom="128/1" PhysicalFrom="128" PhysicalTo="128" />
-                <ChannelSet Name="Test" DMXFrom="192/1" PhysicalFrom="192" PhysicalTo="192" />
+          <DMXChannel DMXBreak="1" Offset="2" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset10.TimerPreset10.TimerPreset10">
+            <LogicalChannel Attribute="TimerPreset10" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset10" Attribute="TimerPreset10" OriginalAttribute="10 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
               </ChannelFunction>
             </LogicalChannel>
           </DMXChannel>
-          <DMXChannel DMXBreak="1" Offset="7" Geometry="Body" Highlight="None" InitialFunction="Body_TimerBrightness.TimerBrightness.Brightness">
+          <DMXChannel DMXBreak="1" Offset="3" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset15.TimerPreset15.TimerPreset15">
+            <LogicalChannel Attribute="TimerPreset15" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset15" Attribute="TimerPreset15" OriginalAttribute="15 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="4" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset20.TimerPreset20.TimerPreset20">
+            <LogicalChannel Attribute="TimerPreset20" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset20" Attribute="TimerPreset20" OriginalAttribute="20 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="5" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset25.TimerPreset25.TimerPreset25">
+            <LogicalChannel Attribute="TimerPreset25" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset25" Attribute="TimerPreset25" OriginalAttribute="25 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="6" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset30.TimerPreset30.TimerPreset30">
+            <LogicalChannel Attribute="TimerPreset30" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset30" Attribute="TimerPreset30" OriginalAttribute="30 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="7" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset35.TimerPreset35.TimerPreset35">
+            <LogicalChannel Attribute="TimerPreset35" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset35" Attribute="TimerPreset35" OriginalAttribute="35 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="8" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset40.TimerPreset40.TimerPreset40">
+            <LogicalChannel Attribute="TimerPreset40" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset40" Attribute="TimerPreset40" OriginalAttribute="40 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="9" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset45.TimerPreset45.TimerPreset45">
+            <LogicalChannel Attribute="TimerPreset45" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset45" Attribute="TimerPreset45" OriginalAttribute="45 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="10" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPreset50.TimerPreset50.TimerPreset50">
+            <LogicalChannel Attribute="TimerPreset50" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPreset50" Attribute="TimerPreset50" OriginalAttribute="50 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="11" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPlus5.TimerPlus5.TimerPlus5">
+            <LogicalChannel Attribute="TimerPlus5" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPlus5" Attribute="TimerPlus5" OriginalAttribute="+5 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="12" Geometry="Body" Highlight="None" InitialFunction="Body_TimerMinus5.TimerMinus5.TimerMinus5">
+            <LogicalChannel Attribute="TimerMinus5" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerMinus5" Attribute="TimerMinus5" OriginalAttribute="-5 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="13" Geometry="Body" Highlight="None" InitialFunction="Body_TimerStart.TimerStart.TimerStart">
+            <LogicalChannel Attribute="TimerStart" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerStart" Attribute="TimerStart" OriginalAttribute="Start" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="14" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPause.TimerPause.TimerPause">
+            <LogicalChannel Attribute="TimerPause" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPause" Attribute="TimerPause" OriginalAttribute="Pause" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="15" Geometry="Body" Highlight="None" InitialFunction="Body_TimerReset.TimerReset.TimerReset">
+            <LogicalChannel Attribute="TimerReset" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerReset" Attribute="TimerReset" OriginalAttribute="Reset" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="16" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPlus1.TimerPlus1.TimerPlus1">
+            <LogicalChannel Attribute="TimerPlus1" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPlus1" Attribute="TimerPlus1" OriginalAttribute="+1 Minute" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="17" Geometry="Body" Highlight="None" InitialFunction="Body_TimerMinus1.TimerMinus1.TimerMinus1">
+            <LogicalChannel Attribute="TimerMinus1" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerMinus1" Attribute="TimerMinus1" OriginalAttribute="-1 Minute" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="18" Geometry="Body" Highlight="None" InitialFunction="Body_TimerPlus2.TimerPlus2.TimerPlus2">
+            <LogicalChannel Attribute="TimerPlus2" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerPlus2" Attribute="TimerPlus2" OriginalAttribute="+2 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="19" Geometry="Body" Highlight="None" InitialFunction="Body_TimerMinus2.TimerMinus2.TimerMinus2">
+            <LogicalChannel Attribute="TimerMinus2" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerMinus2" Attribute="TimerMinus2" OriginalAttribute="-2 Minutes" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="20" Geometry="Body" Highlight="None" InitialFunction="Body_OutputTimer.OutputTimer.OutputTimer">
+            <LogicalChannel Attribute="OutputTimer" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="OutputTimer" Attribute="OutputTimer" OriginalAttribute="Timer Output" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="21" Geometry="Body" Highlight="None" InitialFunction="Body_OutputClock.OutputClock.OutputClock">
+            <LogicalChannel Attribute="OutputClock" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="OutputClock" Attribute="OutputClock" OriginalAttribute="Clock Output" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="22" Geometry="Body" Highlight="None" InitialFunction="Body_OutputBlack.OutputBlack.OutputBlack">
+            <LogicalChannel Attribute="OutputBlack" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="OutputBlack" Attribute="OutputBlack" OriginalAttribute="Black Output" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="23" Geometry="Body" Highlight="None" InitialFunction="Body_OutputTest.OutputTest.OutputTest">
+            <LogicalChannel Attribute="OutputTest" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="OutputTest" Attribute="OutputTest" OriginalAttribute="Test Output" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Ready" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="Trigger" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="24" Geometry="Body" Highlight="None" InitialFunction="Body_TimerSound.TimerSound.TimerSound">
+            <LogicalChannel Attribute="TimerSound" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
+              <ChannelFunction Name="TimerSound" Attribute="TimerSound" OriginalAttribute="End Sound" DMXFrom="0/1" Default="0/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Off" DMXFrom="0/1" PhysicalFrom="0" PhysicalTo="0" />
+                <ChannelSet Name="On" DMXFrom="128/1" PhysicalFrom="100" PhysicalTo="100" />
+              </ChannelFunction>
+            </LogicalChannel>
+          </DMXChannel>
+          <DMXChannel DMXBreak="1" Offset="25" Geometry="Body" Highlight="None" InitialFunction="Body_TimerBrightness.TimerBrightness.TimerBrightness">
             <LogicalChannel Attribute="TimerBrightness" Snap="Yes" Master="None" MibFade="0" DMXChangeTimeLimit="0">
-              <ChannelFunction Name="TimerBrightness" Attribute="TimerBrightness" OriginalAttribute="Brightness" DMXFrom="0/1" Default="0/1" PhysicalFrom="10" PhysicalTo="10" RealFade="0" RealAcceleration="0">
-                <ChannelSet Name="10 pct minimum" DMXFrom="0/1" PhysicalFrom="10" PhysicalTo="10" />
-              </ChannelFunction>
-              <ChannelFunction Name="Brightness" Attribute="TimerBrightness" DMXFrom="26/1" Default="255/1" PhysicalFrom="10.196078431372548" PhysicalTo="100">
-                <ChannelSet Name="Brightness" DMXFrom="26/1" PhysicalFrom="10.196078431372548" PhysicalTo="100" />
+              <ChannelFunction Name="TimerBrightness" Attribute="TimerBrightness" OriginalAttribute="Brightness" DMXFrom="0/1" Default="255/1" PhysicalFrom="0" PhysicalTo="100" RealFade="0" RealAcceleration="0">
+                <ChannelSet Name="Brightness" DMXFrom="0/1" PhysicalFrom="10" PhysicalTo="100" />
               </ChannelFunction>
             </LogicalChannel>
           </DMXChannel>
@@ -318,7 +251,7 @@
       </DMXMode>
     </DMXModes>
     <Revisions>
-      <Revision Text="v1.0 - Stage Timer 7CH network protocol" Date="2026-10-02T00:00:00" UserID="0" ModifiedBy="Stage Timer fixture builder" />
+      <Revision Text="v2.0 - Stage Timer 25CH individual control channels" Date="2026-10-14T00:00:00" UserID="0" ModifiedBy="Stage Timer fixture builder" />
     </Revisions>
     <Protocols>
       <Art-Net />

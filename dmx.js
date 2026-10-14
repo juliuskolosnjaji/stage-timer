@@ -1,4 +1,5 @@
 import dgram from 'node:dgram';
+export const DMX_CHANNELS=25;
 export function parsePacket(b,protocol) {
   if(protocol==='artnet'){
     if(b.length<20||b.subarray(0,8).toString()!=='Art-Net\0'||b.readUInt16LE(8)!==0x5000||b.readUInt16BE(10)<14)return null;
@@ -28,17 +29,18 @@ export class Receiver {
     const old=this.sources.get(key);if(old&&(s.protocol==='sacn'||p.sequence!==0)){const delta=(p.sequence-old.sequence+256)%256;if(delta===0||delta>127)return;}
     this.sources.set(key,{time:now,sequence:p.sequence,priority:p.priority});
     const winner=[...this.sources.entries()].sort((a,b)=>b[1].priority-a[1].priority||a[0].localeCompare(b[0]))[0]?.[0];if(winner!==key)return;
-    if(p.data.length<s.address+5)return;
+    if(p.data.length<s.address+DMX_CHANNELS-1)return;
     this.status={state:'receiving',packets:this.status.packets+1,lastSeen:now,error:null,source:ip};
-    const d=p.data.subarray(s.address-1,s.address+6),prev=this.previous;
-    // Commands and load are edges: a held DMX value never restarts the timer.
-    const command=d[0]<32?'idle':d[0]<96?'start':d[0]<160?'pause':d[0]<224?'reset':'black';
-    const prior=prev?.command;
-    if(d[4]>=128&&(!prev||prev.load<128)){const seconds=Math.min(d[1],99)*3600+Math.min(d[2],59)*60+Math.min(d[3],59);if(seconds>0)this.timer.action('duration',seconds);}
-    if(command!==prior&&command!=='idle'){if(command==='black')this.timer.action('mode','black');else this.timer.action(command);}
-    if(!prev||prev.output!==d[5])this.timer.action('mode',d[5]<64?'timer':d[5]<128?'clock':d[5]<192?'black':'test');
-    if(command==='black')this.timer.action('mode','black');
-    if(d.length>6)this.timer.settings.brightness=Math.max(10,Math.round(d[6]/255*100));
-    this.previous={command,load:d[4],output:d[5]};
+    const d=p.data.subarray(s.address-1,s.address-1+DMX_CHANNELS),prev=this.previous;
+    // Button channels trigger only on a low-to-high edge. Held values never repeat.
+    const trigger=(index,action,value)=>{if(d[index]>=128&&(!prev||prev[index]<128))this.timer.action(action,value);};
+    for(let index=0;index<10;index++)trigger(index,'duration',(index+1)*300);
+    trigger(10,'jog',300);trigger(11,'jog',-300);
+    trigger(15,'jog',60);trigger(16,'jog',-60);trigger(17,'jog',120);trigger(18,'jog',-120);
+    trigger(12,'start');trigger(13,'pause');trigger(14,'reset');
+    for(const [index,mode] of [[19,'timer'],[20,'clock'],[21,'black'],[22,'test']])trigger(index,'mode',mode);
+    this.timer.settings.sounds=d[23]>=128;
+    this.timer.settings.brightness=Math.max(10,Math.round(d[24]/255*100));
+    this.previous=Buffer.from(d);
   }
 }
