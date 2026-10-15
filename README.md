@@ -45,16 +45,16 @@ DMX steuert immer den ersten, in der Oberfläche mit **DMX** markierten Haupt-Sc
 
 ### 25-Kanal-Patch
 
-| Offset | Bei Adresse 1 | Funktion |
-| --- | --- | --- |
-| +0 … +9 | 1–10 | 5, 10, 15 … 50 Minuten laden |
-| +10 / +11 | 11 / 12 | +5 / −5 Minuten |
-| +12 / +13 / +14 | 13 / 14 / 15 | Start / Pause / Reset |
-| +15 / +16 | 16 / 17 | +1 / −1 Minute |
-| +17 / +18 | 18 / 19 | +2 / −2 Minuten |
-| +19 … +22 | 20–23 | Timer / Uhr / Black / Testbild |
-| +23 | 24 | Signalton: 0–127 aus, 128–255 an |
-| +24 | 25 | Helligkeit: 0–255 → 10–100 % |
+| Kanal ab Startadresse | Funktion |
+| --- | --- |
+| 1–10 | 5, 10, 15 … 50 Minuten laden |
+| 11 / 12 | +5 / −5 Minuten |
+| 13 / 14 / 15 | Start / Pause / Reset |
+| 16 / 17 | +1 / −1 Minute |
+| 18 / 19 | +2 / −2 Minuten |
+| 20–23 | Timer / Uhr / Black / Testbild |
+| 24 | Signalton: 0–127 aus, 128–255 an |
+| 25 | Helligkeit: 0–255 → 10–100 % |
 
 Alle Tasterkanäle reagieren auf die steigende Flanke: 0–127 ist bereit, 128–255 löst aus. Vor einer Wiederholung muss der Kanal unter 128 zurückkehren. Eine Zeitwahl pausiert den Timer. Korrekturen funktionieren pausiert und laufend. Ton und Helligkeit sind Pegelkanäle und werden mit jedem Paket übernommen. Gleichzeitige Befehle werden in der Reihenfolge Zeitwahl/Korrektur, Transport, Ausgabe verarbeitet.
 
@@ -86,8 +86,8 @@ Alle Taster zunächst auf 0, Fade und Delay auf 0. Kanal 6 (`TimerPreset30`) kur
 
 ## Steuerung umschalten und Wasserzeichen
 
-Der Schalter in der Netzwerkleiste aktiviert/deaktiviert die Netzwerksteuerung, ohne Universum oder Startadresse zu löschen. Bei der ersten Aktivierung wird sACN gewählt, sofern bisher kein Protokoll eingestellt war. Ein bereits gewähltes Art-Net bleibt erhalten. Deaktivieren stoppt den UDP-Empfang; der Timer läuft unverändert weiter und lässt sich manuell bedienen. Beim erneuten Aktivieren wird das erste empfangene Paket als neuer Steuerzustand ausgewertet.
+Der Schalter in der Netzwerkleiste aktiviert/deaktiviert den DMX-Empfang, ohne Protokoll, Universum oder Startadresse zu löschen. Bei der ersten Aktivierung wird sACN gewählt, sofern bisher kein Protokoll eingestellt war. Ein bereits gewähltes Art-Net bleibt erhalten. Deaktivieren stoppt den UDP-Empfang; der Timer läuft unverändert weiter und lässt sich manuell bedienen. Beim erneuten Aktivieren wird das erste empfangene Paket als neuer Steuerzustand ausgewertet.
 
-Unter Einstellungen lässt sich **Steuerungsstatus als Wasserzeichen** aktivieren. Die Ausgabe zeigt manuelle Steuerung oder sACN/Art-Net mit Signalstatus. Das Wasserzeichen kennzeichnet die gewählte Steuerung; „warte auf Signal“ bedeutet, dass keine aktuellen Pakete empfangen werden.
+Unter Einstellungen lässt sich **DMX-Status auf der Ausgabe anzeigen** aktivieren. Die Ausgabe zeigt manuelle Steuerung oder sACN/Art-Net mit Signalstatus. Das Wasserzeichen kennzeichnet die gewählte Steuerung; „warte auf Signal“ bedeutet, dass keine aktuellen Pakete empfangen werden.
 
 Unter **Logo-Wasserzeichen** PNG, JPEG oder WebP hochladen (Quelldatei bis 10 MB). Das Bild wird im Browser auf maximal 2048 Pixel verkleinert und als PNG gespeichert (maximal 2 MB). Transparenz bei PNG bleibt erhalten. Ein Logo kann unabhängig vom Steuerungsstatus ein-/ausgeblendet werden, mit 5–100 % Deckkraft, 5–50 % Bildbreite und fünf Positionen. Ein weiterer Upload ersetzt das Logo. Logo und Einstellungen bleiben nach Neustarts erhalten. Black und Test blenden beide Wasserzeichen aus.
