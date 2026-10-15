@@ -1,12 +1,180 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>StageTimer · Control</title><link rel="icon" type="image/png" href="/assets/stagetimer-icon.png"><link rel="stylesheet" href="/style.css"></head><body>
-<header><a class="brand" href="/"><img class="brand-logo" src="/assets/stagetimer-logo.png" alt="StageTimer"><small>CONTROL DESK</small></a><div class="head-actions"><span id="connection" class="status">Verbinde …</span><a class="button" href="/viewer" target="_blank">▦ Screen-Viewer ↗</a><button id="settingsOpen">⚙ Einstellungen</button><a id="openDisplay" class="button" href="/display" target="_blank">Ausgabe öffnen ↗</a></div></header>
-<main><div class="page-title"><div><span class="eyebrow">STAGETIMER / CONTROL</span><h1>Show Control</h1></div><span class="tag">SYSTEM BEREIT <i></i></span></div>
-<section class="screen-bar"><label>SCREEN <select id="screenSelect"></select></label><button id="screenIcon" title="Icon ändern">◷</button><button id="addScreen">＋ Neu</button><button id="renameScreen">Umbenennen</button><button id="deleteScreen">Löschen</button><span id="dmxScreenHint">Der erste Screen ist der DMX-Haupt-Screen</span></section>
-<section class="overview"><article class="panel duration"><div class="panel-label">01 <span>DAUER EINSTELLEN</span></div><div class="time-inputs"><label>Stunden<input id="hours" type="number" min="0" max="99" value="0"></label><b>:</b><label>Minuten<input id="minutes" type="number" min="0" max="59" value="5"></label><b>:</b><label>Sekunden<input id="seconds" type="number" min="0" max="59" value="0"></label></div><button id="setDuration" class="subtle">Dauer übernehmen ↵</button></article>
-<article class="panel remaining"><div class="panel-label">02 <span>VERBLEIBENDE ZEIT</span><span id="runState">BEREIT</span></div><div id="remaining" class="timer-value">00:05:00</div><div class="progress"><div id="progress"></div></div></article>
-<article class="panel clock-panel"><div class="panel-label">03 <span>LOKALE UHRZEIT</span></div><div id="clock" class="clock-value">00:00:00</div><div id="date" class="muted"></div></article></section>
-<section class="controls"><article class="panel presets-panel"><div class="panel-label">SCHNELLWAHL <span class="hint">Strg / ⌘ + Klick zum Speichern</span></div><div id="presets" class="presets"></div></article><article class="transport"><button id="play" class="play"><span id="playIcon">▶</span><span id="playLabel">Starten</span><kbd>LEERTASTE</kbd></button><button id="reset" class="reset"><span>↺</span><span>Zurücksetzen</span><kbd>R</kbd></button></article><article class="panel jog"><div class="panel-label">ZEIT KORRIGIEREN</div><div class="jog-grid"><button data-jog="300">+ 5 min</button><button data-jog="60">+ 1 min</button><button data-jog="-300">− 5 min</button><button data-jog="-60">− 1 min</button></div><label class="sound-switch"><input id="sounds" type="checkbox"> Signalton bei Ablauf <button id="soundTest" title="Signalton testen">♫</button></label></article></section>
-<section class="panel schedule-panel"><div class="panel-label">GEPLANTER START <span class="hint">verwendet die aktuell eingestellte Dauer</span></div><div class="schedule-form"><label>Datum und Uhrzeit <input id="scheduleAt" type="datetime-local"></label><button id="setSchedule" class="primary">Start planen</button><button id="cancelSchedule">Planung löschen</button><span id="scheduleStatus">Kein Start geplant</span></div></section>
-<section class="bottom"><article class="panel message-panel"><div class="panel-label">NACHRICHT AN DIE BÜHNE <span class="hint" id="messageState">Keine Nachricht aktiv</span></div><div class="message-form"><input id="message" maxlength="300" placeholder="Deine Nachricht auf dem Ausgabebildschirm …"><button id="sendMessage" class="primary">Senden ↗</button><button id="clearMessage" title="Nachricht ausblenden">✕</button></div></article><article class="panel output-panel"><div class="panel-label">AUSGABE</div><div class="output-modes"><button data-mode="timer">◷ Timer</button><button data-mode="clock">◴ Uhr</button><button data-mode="black">● Black</button><button data-mode="test">▦ Test</button></div></article></section>
-<section class="network-strip"><div><span class="network-dot" id="networkDot"></span><strong id="networkName">DMX-Eingang deaktiviert</strong><span id="networkInfo">In den Einstellungen verbinden</span></div><label class="control-toggle"><input id="controlToggle" type="checkbox"> <span id="controlToggleLabel">sACN-Steuerung</span></label><button id="networkSettings">DMX konfigurieren →</button></section><footer><span>STAGE TIMER <span class="muted">/ Lokal & synchron</span></span><span id="webUrls"></span></footer></main>
-<dialog id="settings"><form id="settingsForm"><div class="dialog-header"><div><span class="eyebrow">KONFIGURATION</span><h2>Einstellungen</h2></div><button type="button" id="settingsClose">✕</button></div><div class="settings-grid"><fieldset><legend>Anzeige</legend><label>Helligkeit <input name="brightness" type="range" min="10" max="100"></label><label>Hintergrund <input name="background" type="color"></label><label><input name="showProgress" type="checkbox"> Fortschrittsbalken anzeigen</label><label><input name="showClock" type="checkbox"> Uhrzeit unter dem Timer</label><label><input name="alwaysHours" type="checkbox"> Stunden immer anzeigen</label><label><input name="whiteOnly" type="checkbox"> Timer nur in Weiß</label><label><input name="stopAtZero" type="checkbox"> Bei Null stoppen</label><label>Gelb ab (Minuten) <input name="amber" type="number" min="0" max="5999" step="0.1"></label><label>Rot ab (Minuten) <input name="red" type="number" min="0" max="5999" step="0.1"></label></fieldset><fieldset><legend>grandMA3 / DMX-Eingang</legend><label><input name="controlEnabled" type="checkbox"> DMX-Empfang aktiv</label><label><input name="showControlWatermark" type="checkbox"> DMX-Status auf der Ausgabe anzeigen</label><label>DMX-Protokoll <select name="protocol"><option value="sacn">sACN · E1.31</option><option value="artnet">Art-Net · ArtDMX</option></select></label><label>DMX-Universum<input name="universe" type="number" min="1" max="63999"></label><label>DMX-Startadresse<input name="address" type="number" min="1" max="488"></label><p class="help">Kanal 1 entspricht der eingestellten Startadresse. Befehlskanäle: 0–127 = bereit, 128–255 = auslösen. Vor erneutem Auslösen erst auf 0 zurücksetzen.<br>sACN: UDP 5568 · Art-Net: UDP 6454.</p><table><thead><tr><th>Kanal ab Startadresse</th><th>Funktion</th></tr></thead><tbody><tr><td>1–10</td><td>5, 10, 15 … 50 Minuten laden</td></tr><tr><td>11 / 12</td><td>+5 / −5 Minuten</td></tr><tr><td>13 / 14 / 15</td><td>Start / Pause / Reset</td></tr><tr><td>16–19</td><td>+1 / −1 / +2 / −2 Minuten</td></tr><tr><td>20–23</td><td>Timer / Uhr / Black / Testbild</td></tr><tr><td>24</td><td>Signalton: 0–127 aus, 128–255 an</td></tr><tr><td>25</td><td>Helligkeit: 0 = manuell, 1–255 → 10–100 %</td></tr></tbody></table></fieldset></div><fieldset class="logo-settings"><legend>Logo-Wasserzeichen</legend><label>Logo hochladen (PNG, JPEG, WebP)<input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp"></label><div class="logo-preview-row"><img id="logoPreview" alt="Logo-Vorschau" hidden><span id="logoStatus" class="help">Noch kein Logo hochgeladen</span></div><label><input name="showLogo" type="checkbox"> Logo in der Ausgabe anzeigen</label><label>Deckkraft (5–100 %)<input name="logoOpacity" type="range" min="5" max="100"></label><label>Breite (5–50 %)<input name="logoSize" type="range" min="5" max="50"></label><label>Position<select name="logoPosition"><option value="bottom-right">Unten rechts</option><option value="bottom-left">Unten links</option><option value="top-right">Oben rechts</option><option value="top-left">Oben links</option><option value="center">Mitte</option></select></label><p class="help">Das Logo wird lokal gespeichert. Wasserzeichen sind bei Black und Test ausgeblendet. Hochladen wird sofort gespeichert, die weiteren Einstellungen mit „Speichern“.</p></fieldset><p class="help">Ausgabefenster auf den gewünschten Bildschirm ziehen und dort „Vollbild“ wählen. Einstellungen und Presets werden lokal gespeichert.</p><div class="dialog-footer"><span id="settingsError" role="alert"></span><button type="submit" class="primary">Einstellungen speichern</button></div></form></dialog><div id="toast" role="status"></div><script type="module" src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>StageTimer · Control</title>
+  <link rel="icon" type="image/png" href="/assets/stagetimer-icon.png">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <img class="brand-logo" src="/assets/stagetimer-logo.png" alt="StageTimer">
+      <span>CONTROL</span>
+    </a>
+    <div class="top-status"><span class="status-led"></span><span id="connection">Verbinde …</span></div>
+    <nav class="top-actions" aria-label="Werkzeuge">
+      <a class="button" href="/viewer" target="_blank">Screen-Viewer</a>
+      <button id="settingsOpen">Einstellungen</button>
+      <a id="openDisplay" class="button button-accent" href="/display" target="_blank">Ausgabe öffnen ↗</a>
+    </nav>
+  </header>
+
+  <main class="workspace">
+    <aside class="sidebar">
+      <section class="side-section screen-section">
+        <div class="section-heading"><span>SCREENS</span><button id="addScreen" class="icon-button" title="Screen anlegen">＋</button></div>
+        <div class="screen-select-row">
+          <button id="screenIcon" class="screen-icon" title="Icon ändern">◷</button>
+          <select id="screenSelect" aria-label="Screen auswählen"></select>
+        </div>
+        <div class="screen-actions">
+          <button id="renameScreen">Umbenennen</button>
+          <button id="deleteScreen">Löschen</button>
+        </div>
+        <p id="dmxScreenHint" class="side-note">Der erste Screen ist der DMX-Haupt-Screen</p>
+      </section>
+
+      <section class="side-section output-section">
+        <div class="section-heading"><span>AUSGABE</span></div>
+        <div class="output-modes">
+          <button data-mode="timer"><span>◷</span>Timer</button>
+          <button data-mode="clock"><span>◴</span>Uhr</button>
+          <button data-mode="black"><span>●</span>Black</button>
+          <button data-mode="test"><span>▦</span>Testbild</button>
+        </div>
+      </section>
+
+      <section class="side-section network-section">
+        <div class="section-heading"><span>DMX / NETZWERK</span><span class="network-dot" id="networkDot"></span></div>
+        <strong id="networkName">DMX-Eingang deaktiviert</strong>
+        <p id="networkInfo">In den Einstellungen verbinden</p>
+        <label class="control-toggle"><input id="controlToggle" type="checkbox"><span id="controlToggleLabel">sACN-Steuerung</span></label>
+        <button id="networkSettings" class="text-button">DMX konfigurieren →</button>
+      </section>
+    </aside>
+
+    <section class="control-surface">
+      <div class="surface-heading">
+        <div><span class="eyebrow">LIVE CONTROL</span><h1 id="surfaceTitle">Haupt-Screen</h1></div>
+        <div class="system-state"><span class="status-led"></span> SYSTEM BEREIT</div>
+      </div>
+
+      <section class="timer-console">
+        <div class="timer-readout">
+          <div class="readout-header"><span>VERBLEIBENDE ZEIT</span><strong id="runState">BEREIT</strong></div>
+          <div id="remaining" class="timer-value">00:05:00</div>
+          <div class="progress"><div id="progress"></div></div>
+        </div>
+        <div class="transport">
+          <button id="play" class="play"><span id="playIcon">▶</span><span id="playLabel">Starten</span><kbd>LEERTASTE</kbd></button>
+          <button id="reset" class="reset"><span>↺</span><span>Zurücksetzen</span><kbd>R</kbd></button>
+        </div>
+      </section>
+
+      <section class="tool-grid">
+        <article class="tool-card duration">
+          <div class="card-heading"><span>DAUER</span><span>HH : MM : SS</span></div>
+          <div class="time-inputs">
+            <label>Stunden<input id="hours" type="number" min="0" max="99" value="0"></label><b>:</b>
+            <label>Minuten<input id="minutes" type="number" min="0" max="59" value="5"></label><b>:</b>
+            <label>Sekunden<input id="seconds" type="number" min="0" max="59" value="0"></label>
+          </div>
+          <button id="setDuration" class="full-button">Dauer übernehmen</button>
+        </article>
+
+        <article class="tool-card presets-panel">
+          <div class="card-heading"><span>SCHNELLWAHL</span><span>⌘/STRG + KLICK SPEICHERT</span></div>
+          <div id="presets" class="presets"></div>
+        </article>
+
+        <article class="tool-card jog">
+          <div class="card-heading"><span>ZEIT KORRIGIEREN</span></div>
+          <div class="jog-grid">
+            <button data-jog="300">+ 5 min</button><button data-jog="60">+ 1 min</button>
+            <button data-jog="-300">− 5 min</button><button data-jog="-60">− 1 min</button>
+          </div>
+          <label class="sound-switch"><input id="sounds" type="checkbox">Signalton bei Ablauf<button id="soundTest" title="Signalton testen">Test ♫</button></label>
+        </article>
+
+        <article class="tool-card clock-panel">
+          <div class="card-heading"><span>LOKALE UHRZEIT</span></div>
+          <div id="clock" class="clock-value">00:00:00</div>
+          <div id="date" class="date-value"></div>
+        </article>
+      </section>
+
+      <section class="utility-grid">
+        <article class="utility-card schedule-panel">
+          <div class="card-heading"><span>GEPLANTER START</span><span id="scheduleStatus">Kein Start geplant</span></div>
+          <div class="schedule-form">
+            <label>Datum und Uhrzeit<input id="scheduleAt" type="datetime-local"></label>
+            <button id="setSchedule" class="button-accent">Start planen</button>
+            <button id="cancelSchedule">Planung löschen</button>
+          </div>
+        </article>
+
+        <article class="utility-card message-panel">
+          <div class="card-heading"><span>NACHRICHT AN DIE BÜHNE</span><span id="messageState">Keine Nachricht aktiv</span></div>
+          <div class="message-form">
+            <input id="message" maxlength="300" placeholder="Nachricht auf dem Ausgabebildschirm …">
+            <button id="sendMessage" class="button-accent">Senden</button>
+            <button id="clearMessage" title="Nachricht ausblenden">✕</button>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <footer><span>STAGETIMER <span class="muted">/ LOCAL CONTROL</span></span><span id="webUrls"></span></footer>
+
+  <dialog id="settings">
+    <form id="settingsForm">
+      <div class="dialog-header"><div><span class="eyebrow">SYSTEM</span><h2>Einstellungen</h2></div><button type="button" id="settingsClose">✕</button></div>
+      <div class="settings-grid">
+        <fieldset>
+          <legend>Anzeige</legend>
+          <label>Helligkeit <input name="brightness" type="range" min="10" max="100"></label>
+          <label>Hintergrund <input name="background" type="color"></label>
+          <label><input name="showProgress" type="checkbox">Fortschrittsbalken anzeigen</label>
+          <label><input name="showClock" type="checkbox">Uhrzeit unter dem Timer</label>
+          <label><input name="alwaysHours" type="checkbox">Stunden immer anzeigen</label>
+          <label><input name="whiteOnly" type="checkbox">Timer nur in Weiß</label>
+          <label><input name="stopAtZero" type="checkbox">Bei Null stoppen</label>
+          <label>Gelb ab (Minuten) <input name="amber" type="number" min="0" max="5999" step="0.1"></label>
+          <label>Rot ab (Minuten) <input name="red" type="number" min="0" max="5999" step="0.1"></label>
+        </fieldset>
+        <fieldset>
+          <legend>grandMA3 / DMX-Eingang</legend>
+          <label><input name="controlEnabled" type="checkbox">DMX-Empfang aktiv</label>
+          <label><input name="showControlWatermark" type="checkbox">DMX-Status auf der Ausgabe anzeigen</label>
+          <label>DMX-Protokoll <select name="protocol"><option value="sacn">sACN · E1.31</option><option value="artnet">Art-Net · ArtDMX</option></select></label>
+          <label>DMX-Universum<input name="universe" type="number" min="1" max="63999"></label>
+          <label>DMX-Startadresse<input name="address" type="number" min="1" max="488"></label>
+          <p class="help">Kanal 1 entspricht der eingestellten Startadresse. Befehlskanäle: 0–127 = bereit, 128–255 = auslösen. Vor erneutem Auslösen erst auf 0 zurücksetzen.<br>sACN: UDP 5568 · Art-Net: UDP 6454.</p>
+          <table><thead><tr><th>Kanal ab Startadresse</th><th>Funktion</th></tr></thead><tbody>
+            <tr><td>1–10</td><td>5, 10, 15 … 50 Minuten laden</td></tr><tr><td>11 / 12</td><td>+5 / −5 Minuten</td></tr>
+            <tr><td>13 / 14 / 15</td><td>Start / Pause / Reset</td></tr><tr><td>16–19</td><td>+1 / −1 / +2 / −2 Minuten</td></tr>
+            <tr><td>20–23</td><td>Timer / Uhr / Black / Testbild</td></tr><tr><td>24</td><td>Signalton: 0–127 aus, 128–255 an</td></tr>
+            <tr><td>25</td><td>Helligkeit: 0 = manuell, 1–255 → 10–100 %</td></tr>
+          </tbody></table>
+        </fieldset>
+      </div>
+      <fieldset class="logo-settings">
+        <legend>Logo-Wasserzeichen</legend>
+        <label>Logo hochladen (PNG, JPEG, WebP)<input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+        <div class="logo-preview-row"><img id="logoPreview" alt="Logo-Vorschau" hidden><span id="logoStatus" class="help">Noch kein Logo hochgeladen</span></div>
+        <label><input name="showLogo" type="checkbox">Logo in der Ausgabe anzeigen</label>
+        <label>Deckkraft (5–100 %)<input name="logoOpacity" type="range" min="5" max="100"></label>
+        <label>Breite (5–50 %)<input name="logoSize" type="range" min="5" max="50"></label>
+        <label>Position<select name="logoPosition"><option value="bottom-right">Unten rechts</option><option value="bottom-left">Unten links</option><option value="top-right">Oben rechts</option><option value="top-left">Oben links</option><option value="center">Mitte</option></select></label>
+        <p class="help">Das Logo wird lokal gespeichert. Wasserzeichen sind bei Black und Test ausgeblendet.</p>
+      </fieldset>
+      <div class="dialog-footer"><span id="settingsError" role="alert"></span><button type="submit" class="button-accent">Einstellungen speichern</button></div>
+    </form>
+  </dialog>
+  <div id="toast" role="status"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
