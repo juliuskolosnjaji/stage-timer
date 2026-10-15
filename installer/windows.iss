@@ -1,5 +1,5 @@
 #ifndef MyAppVersion
-  #define MyAppVersion "2.2.0"
+  #define MyAppVersion "2.2.1"
 #endif
 #ifndef SourceDir
   #error SourceDir must point to the extracted Windows bundle
@@ -28,7 +28,8 @@ Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 CloseApplications=yes
-UninstallDisplayIcon={app}\runtime\node.exe
+SetupIconFile=public\assets\stagetimer.ico
+UninstallDisplayIcon={app}\app\public\assets\stagetimer.ico
 
 [Languages]
 Name: "german"; MessagesFile: "compiler:Languages\German.isl"
@@ -41,8 +42,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\Stage Timer"; Filename: "{app}\Start Stage Timer.bat"; WorkingDir: "{app}"
-Name: "{autodesktop}\Stage Timer"; Filename: "{app}\Start Stage Timer.bat"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{group}\Stage Timer"; Filename: "{app}\Start Stage Timer.bat"; WorkingDir: "{app}"; IconFilename: "{app}\app\public\assets\stagetimer.ico"
+Name: "{autodesktop}\Stage Timer"; Filename: "{app}\Start Stage Timer.bat"; WorkingDir: "{app}"; IconFilename: "{app}\app\public\assets\stagetimer.ico"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\Start Stage Timer.bat"; Description: "Stage Timer starten"; WorkingDir: "{app}"; Flags: postinstall shellexec skipifsilent nowait
