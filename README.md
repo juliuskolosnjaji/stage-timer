@@ -12,7 +12,7 @@ Unter **Releases** stehen ein Setup-Assistent für Windows (x64) sowie portable 
 npm start
 ```
 
-Bedienpult: http://localhost:8181 · Ausgabe: http://localhost:8181/display
+Bedienpult: http://localhost:8181 · Screen-Viewer: http://localhost:8181/viewer · Ausgabe: http://localhost:8181/display
 
 Ausgabe auf den zweiten Bildschirm ziehen und „Vollbild“ anklicken. Weitere Geräte im gleichen LAN öffnen `http://<IP-des-Timer-Rechners>:8181/display`. Der Server muss weiterlaufen. Mit Strg+C beenden. Abweichender HTTP-Port: `PORT=8182 npm start`.
 
@@ -24,7 +24,8 @@ Die Uhrzeit kommt vom jeweiligen Anzeigegerät, die Countdowns zentral vom Serve
 - Start/Pause: Schaltfläche oder Leertaste; Reset: Schaltfläche oder R.
 - Strg/⌘ + Preset-Klick speichert die eingegebene Dauer als Preset.
 - Zeitkorrektur ±1 / ±5 Minuten funktioniert auch während des Countdowns.
-- Über **Screen → Neu** lassen sich mehrere unabhängige Timer anlegen. Jeder Screen erhält einen eigenen Ausgabe-Link, eigene Anzeigeeinstellungen, ein eigenes Logo und einen eigenen Zeitplan.
+- Über **Screen → Neu** lassen sich mehrere unabhängige Timer anlegen. Jeder Screen erhält einen eigenen Ausgabe-Link, ein frei wählbares Icon, eigene Anzeigeeinstellungen, ein eigenes Logo und einen eigenen Zeitplan.
+- Der **Screen-Viewer** zeigt alle Screens als Kacheln mit Icon, Status und Restzeit. Ein Klick öffnet die gewählte Ausgabe in einem eigenen Fenster; das Icon wird über die Icon-Schaltfläche neben der Screen-Auswahl geändert.
 - Unter **Geplanter Start** wird die aktuell eingestellte Dauer an einem lokalen Datum mit Uhrzeit automatisch gestartet. Pro Screen kann ein Start geplant oder wieder gelöscht werden.
 - Nachrichten erscheinen auf der Ausgabe; ✕ blendet sie aus.
 - Timer, Uhr, Black und Testbild stehen als Ausgabemodi bereit.
