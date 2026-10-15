@@ -1,8 +1,8 @@
 export const defaults = {brightness:100, showProgress:true, showClock:true, alwaysHours:true, whiteOnly:false, stopAtZero:false, background:'#000000', amber:300, red:120, sounds:false, controlEnabled:true, showControlWatermark:false, showLogo:false, logoOpacity:20, logoSize:18, logoPosition:'bottom-right', protocol:'off', universe:1, address:1};
 export class Timer {
-  constructor(settings={}) { this.settings={...defaults,...settings}; this.duration=300; this.remaining=300; this.running=false; this.deadline=0; this.mode='timer'; this.message=''; this.presets=[300,600,900,1200,1500,1800,2100,2400,2700]; }
+  constructor(settings={}) { this.settings={...defaults,...settings}; this.dmxBrightness=null; this.duration=300; this.remaining=300; this.running=false; this.deadline=0; this.mode='timer'; this.message=''; this.presets=[300,600,900,1200,1500,1800,2100,2400,2700]; }
   seconds() { return this.running ? (this.settings.stopAtZero?Math.max(0,(this.deadline-performance.now())/1000):(this.deadline-performance.now())/1000) : this.remaining; }
-  snapshot() { if(this.running && this.settings.stopAtZero && this.seconds()<=0){this.remaining=0;this.running=false;} return {duration:this.duration,remaining:this.seconds(),running:this.running,mode:this.mode,message:this.message,presets:this.presets,settings:this.settings}; }
+  snapshot() { if(this.running && this.settings.stopAtZero && this.seconds()<=0){this.remaining=0;this.running=false;} return {duration:this.duration,remaining:this.seconds(),running:this.running,mode:this.mode,message:this.message,presets:this.presets,settings:this.settings,outputBrightness:this.dmxBrightness??this.settings.brightness}; }
   action(type,value) {
     if(type==='start'&&!this.running){this.deadline=performance.now()+this.remaining*1000;this.running=true;}
     else if(type==='pause'){this.remaining=this.seconds();this.running=false;}

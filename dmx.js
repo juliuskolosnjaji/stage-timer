@@ -47,7 +47,8 @@ export class Receiver {
     trigger(12,'start');trigger(13,'pause');trigger(14,'reset');
     for(const [index,mode] of [[19,'timer'],[20,'clock'],[21,'black'],[22,'test']])trigger(index,'mode',mode);
     this.timer.settings.sounds=d[23]>=128;
-    this.timer.settings.brightness=Math.max(10,Math.round(d[24]/255*100));
+    // Zero releases the DMX override so the manually configured brightness remains usable.
+    this.timer.dmxBrightness=d[24]===0?null:Math.max(10,Math.round(d[24]/255*100));
     this.previous=Buffer.from(d);
   }
 }

@@ -55,9 +55,9 @@ DMX steuert immer den ersten, in der Oberfläche mit **DMX** markierten Haupt-Sc
 | 18 / 19 | +2 / −2 Minuten |
 | 20–23 | Timer / Uhr / Black / Testbild |
 | 24 | Signalton: 0–127 aus, 128–255 an |
-| 25 | Helligkeit: 0–255 → 10–100 % |
+| 25 | Helligkeit: 0 = manuelle Einstellung, 1–255 → 10–100 % |
 
-Alle Tasterkanäle reagieren auf die steigende Flanke: 0–127 ist bereit, 128–255 löst aus. Vor einer Wiederholung muss der Kanal unter 128 zurückkehren. Eine Zeitwahl pausiert den Timer. Korrekturen funktionieren pausiert und laufend. Ton und Helligkeit sind Pegelkanäle und werden mit jedem Paket übernommen. Gleichzeitige Befehle werden in der Reihenfolge Zeitwahl/Korrektur, Transport, Ausgabe verarbeitet.
+Alle Tasterkanäle reagieren auf die steigende Flanke: 0–127 ist bereit, 128–255 löst aus. Vor einer Wiederholung muss der Kanal unter 128 zurückkehren. Eine Zeitwahl pausiert den Timer. Korrekturen funktionieren pausiert und laufend. Ton ist ein Pegelkanal. Kanal 25 überschreibt die Helligkeit nur bei Werten über 0; bei 0 gilt die manuelle Einstellung. Gleichzeitige Befehle werden in der Reihenfolge Zeitwahl/Korrektur, Transport, Ausgabe verarbeitet.
 
 ### Beispiel: 30 Minuten per Cues starten
 
