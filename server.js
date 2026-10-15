@@ -53,6 +53,6 @@ const server=http.createServer(async(req,res)=>{try{
  }
  if(req.method!=='GET'||!files[path]){res.writeHead(404);res.end('Nicht gefunden');return;}const name=files[path];res.setHeader('Content-Type',name.endsWith('.css')?'text/css':name.endsWith('.js')?'text/javascript':name.endsWith('.png')?'image/png':name.endsWith('.ico')?'image/x-icon':'text/html; charset=utf-8');res.end(await readFile(new URL('./public/'+name,import.meta.url)));
  }catch(e){res.writeHead(400,{'Content-Type':'application/json'});res.end(JSON.stringify({error:e.message}));}});
-setInterval(()=>{if(screens.some(screen=>applySchedule(screen)))save();for(const [client,id] of clients)client.write(`data: ${JSON.stringify(state(id))}\n\n`);},100);
+setInterval(()=>{receiver.maintain();if(screens.some(screen=>applySchedule(screen)))save();for(const [client,id] of clients)client.write(`data: ${JSON.stringify(state(id))}\n\n`);},100);
 server.listen(port,'0.0.0.0',()=>console.log(`Stage Timer → http://localhost:${port}\nAusgabe → http://localhost:${port}/display\n${urls.join('\n')}`));
 function close(){for(const client of clients.keys())client.end();if(receiver.socket)receiver.socket.close();server.close(()=>process.exit());}process.on('SIGINT',close);process.on('SIGTERM',close);

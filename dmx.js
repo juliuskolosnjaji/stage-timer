@@ -13,14 +13,21 @@ export function parsePacket(b,protocol) {
   return {universe:b.readUInt16BE(113),sequence:b[111],priority:b[108],cid:b.subarray(22,38).toString('hex'),terminated:!!(b[112]&0x40),data:b.subarray(126,125+count)};
 }
 export class Receiver {
-  constructor(timer){this.timer=timer;this.socket=null;this.sources=new Map();this.previous=null;this.status={state:'off',packets:0,lastSeen:null,error:null};}
-  configure(){
-    if(this.socket){this.socket.close();this.socket=null;}this.sources.clear();this.previous=null;
-    const s=this.timer.settings;this.status={state:s.protocol==='off'||!s.controlEnabled?'off':'binding',packets:0,lastSeen:null,error:null};if(s.protocol==='off'||!s.controlEnabled)return;
+  constructor(timer){this.timer=timer;this.socket=null;this.sources=new Map();this.previous=null;this.openedAt=0;this.lastRecovery=0;this.status={state:'off',packets:0,lastSeen:null,error:null};}
+  configure({recovering=false,now=Date.now()}={}){
+    const retained=recovering?{previous:this.previous,packets:this.status.packets,lastSeen:this.status.lastSeen,source:this.status.source}:null;
+    if(this.socket){try{this.socket.close();}catch{}this.socket=null;}this.sources.clear();this.previous=retained?.previous||null;this.openedAt=now;
+    const s=this.timer.settings;this.status={state:s.protocol==='off'||!s.controlEnabled?'off':recovering?'reconnecting':'binding',packets:retained?.packets||0,lastSeen:retained?.lastSeen||null,error:null,...(retained?.source?{source:retained.source}:{})};if(s.protocol==='off'||!s.controlEnabled)return;
     const socket=dgram.createSocket({type:'udp4',reuseAddr:true});this.socket=socket;
     socket.on('error',e=>{if(this.socket===socket){this.status.state='error';this.status.error=e.message;}});
     socket.on('message',(b,r)=>this.receive(b,r.address));
     socket.bind(s.protocol==='sacn'?5568:6454,'0.0.0.0',()=>{if(this.socket!==socket)return;try{if(s.protocol==='sacn')socket.addMembership(`239.255.${s.universe>>8}.${s.universe&255}`);this.status.state='listening';}catch(e){this.status.state='error';this.status.error=e.message;}});
+  }
+  maintain(now=Date.now()){
+    const s=this.timer.settings;if(!s.controlEnabled||s.protocol==='off')return false;
+    const lastActivity=this.status.lastSeen||this.openedAt;
+    if(now-lastActivity<4000||now-this.lastRecovery<4000)return false;
+    this.lastRecovery=now;this.configure({recovering:true,now});return true;
   }
   receive(b,ip){
     const s=this.timer.settings;if(!s.controlEnabled||s.protocol==='off')return;const p=parsePacket(b,s.protocol);if(!p||p.universe!==s.universe)return;
