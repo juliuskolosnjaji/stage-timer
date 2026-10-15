@@ -1,5 +1,5 @@
 #ifndef MyAppVersion
-  #define MyAppVersion "2.2.1"
+  #define MyAppVersion "2.2.2"
 #endif
 #ifndef SourceDir
   #error SourceDir must point to the extracted Windows bundle
@@ -28,7 +28,7 @@ Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 CloseApplications=yes
-SetupIconFile=public\assets\stagetimer.ico
+SetupIconFile=..\public\assets\stagetimer.ico
 UninstallDisplayIcon={app}\app\public\assets\stagetimer.ico
 
 [Languages]
