@@ -31,7 +31,10 @@ Die Uhrzeit kommt vom jeweiligen Anzeigegerät, die Countdowns zentral vom Serve
 - Timer, Uhr, Black und Testbild stehen als Ausgabemodi bereit.
 - Warnschwellen, Stundenanzeige, Hintergrund, Helligkeit, Fortschrittsbalken und Stoppen bei Null sind einstellbar.
 - Der Signalton wird im Bedienpult erzeugt. Vor der Show einmal den Testton anklicken, damit der Browser Audio freigibt. Bei mehreren geöffneten Bedienpulten kann der Ton mehrfach ertönen.
+- **LTC Audio** gibt wahlweise die Timer-Restzeit, die seit dem Start verstrichene Laufzeit oder die lokale Uhrzeit als SMPTE Linear Timecode aus. Unterstützt werden 24, 25, 29,97 Drop-Frame und 30 fps. Quelle, Framerate und Pegel werden im Bedienpult gespeichert; nach jedem Seiten- oder Programmstart muss die Audioausgabe per Klick erneut aktiviert werden.
 - Logo-Upload, Sichtbarkeit, Deckkraft, Skalierung von 5–50 % und Position werden pro Screen unter **Einstellungen → Logo-Wasserzeichen** verwaltet.
+
+Für LTC den gewünschten physischen Audioausgang in den Systemeinstellungen wählen und möglichst einen separaten Interface-Ausgang direkt mit dem Timecode-Eingang des Zielgeräts verbinden. Das Signal ist kein Hörton; nicht mit hohem Pegel über Lautsprecher ausgeben. Der Pegelregler in Stage Timer stellt den digitalen Ausgangspegel ein.
 
 ## grandMA3 anschließen
 

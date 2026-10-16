@@ -46,6 +46,34 @@
         </div>
       </section>
 
+      <section class="side-section ltc-section">
+        <div class="section-heading"><span>LTC AUDIO</span><span id="ltcStatus" class="ltc-status">AUS</span></div>
+        <output id="ltcCode" class="ltc-code">00:05:00:00</output>
+        <div class="ltc-controls">
+          <label>Quelle
+            <select id="ltcSource">
+              <option value="remaining">Timer · Restzeit</option>
+              <option value="elapsed">Timer · Laufzeit</option>
+              <option value="clock">Lokale Uhrzeit</option>
+            </select>
+          </label>
+          <label>Framerate
+            <select id="ltcFps">
+              <option value="24">24 fps</option>
+              <option value="25">25 fps</option>
+              <option value="29.97">29,97 DF</option>
+              <option value="30">30 fps</option>
+            </select>
+          </label>
+          <label class="ltc-level">Pegel
+            <input id="ltcLevel" type="range" min="5" max="100" value="20">
+            <output id="ltcLevelValue">20 %</output>
+          </label>
+        </div>
+        <button id="ltcToggle" class="ltc-toggle">LTC starten</button>
+        <p class="side-note">Mono · System-Audioausgang</p>
+      </section>
+
       <section class="side-section network-section">
         <div class="section-heading"><span>DMX / NETZWERK</span><span class="network-dot" id="networkDot"></span></div>
         <strong id="networkName">DMX-Eingang deaktiviert</strong>
