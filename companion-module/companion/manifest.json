@@ -1,0 +1,28 @@
+{
+	"$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
+	"type": "connection",
+	"id": "juliuskolosnjaji-stage-timer",
+	"name": "juliuskolosnjaji-stage-timer",
+	"shortname": "Stage Timer",
+	"description": "Control Stage Timer and show its live state on a Stream Deck.",
+	"version": "1.0.0",
+	"license": "MIT",
+	"repository": "git+https://github.com/juliuskolosnjaji/stage-timer.git",
+	"bugs": "https://github.com/juliuskolosnjaji/stage-timer/issues",
+	"maintainers": [
+		{
+			"name": "Stage Timer contributors",
+			"email": "juliuskolosnjaji@users.noreply.github.com"
+		}
+	],
+	"runtime": {
+		"type": "node26",
+		"api": "nodejs-ipc",
+		"apiVersion": "0.0.0",
+		"entrypoint": "../src/main.js"
+	},
+	"legacyIds": [],
+	"manufacturer": "Julius Kolosnjaji",
+	"products": ["Stage Timer"],
+	"keywords": ["timer", "countdown", "stage", "stream deck"]
+}

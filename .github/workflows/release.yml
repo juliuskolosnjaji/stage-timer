@@ -18,13 +18,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: 26
 
       - name: Run tests
         run: npm test
 
       - name: Build portable bundles
         run: bash scripts/package-release.sh "${GITHUB_REF_NAME#v}" "$(node -p 'process.versions.node')"
+
+      - name: Build Companion module
+        working-directory: companion-module
+        run: |
+          npx --yes corepack@latest yarn install --immutable
+          npx --yes corepack@latest yarn package
+          cp juliuskolosnjaji-stage-timer-1.0.0.tgz ../dist/
 
       - name: Upload portable bundles
         uses: actions/upload-artifact@v7

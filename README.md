@@ -18,6 +18,24 @@ Ausgabe auf den zweiten Bildschirm ziehen und „Vollbild“ anklicken. Weitere 
 
 Die Uhrzeit kommt vom jeweiligen Anzeigegerät, die Countdowns zentral vom Server. Screens, Presets, geplante Starts und Einstellungen werden in `settings.json` gespeichert. Laufende Timer werden nach einem Neustart nicht automatisch fortgesetzt; ein noch ausstehender geplanter Start bleibt erhalten und wird zum festgelegten Zeitpunkt ausgelöst. War der Server zu diesem Zeitpunkt kurz offline, wird die bereits verstrichene Zeit beim nächsten Start berücksichtigt. Bei Verlust des DMX-Signals läuft der Timer weiter; bei Verlust der Browserverbindung friert die Ausgabe ein und zeigt einen Verbindungshinweis. Der Server stellt den Zustand beim Wiederverbinden wieder her.
 
+## Bitfocus Companion / Stream Deck
+
+Unter `companion-module` liegt ein eigenes Companion-Verbindungsmodul. Es liefert fertige Stream-Deck-Presets für Transport, alle neun in Stage Timer gespeicherten Zeit-Presets, ±1/±5 Minuten, Ausgabemodi und Nachrichten. Restzeit, Laufstatus, aktives Preset und Ausgabemodus werden live als Variablen beziehungsweise Button-Feedbacks an Companion gemeldet.
+
+Fertige Releases enthalten die Datei `juliuskolosnjaji-stage-timer-1.0.0.tgz`. In Companion unter **Modules → Import module package** importieren, danach eine Verbindung **Stage Timer** anlegen:
+
+- **Host:** IP-Adresse des Timer-Rechners ohne `http://`
+- **Port:** `8181` beziehungsweise der mit `PORT` gewählte Port
+- **Screen ID:** `screen-1` für den Haupt-Screen; bei weiteren Screens steht die ID im Ausgabe-Link hinter `?screen=`
+
+Anschließend können die mitgelieferten Presets direkt auf eine Companion-Seite gezogen werden. Der Stream Deck wird in Companion separat als Surface eingerichtet. Für einen lokalen Modul-Build:
+
+```sh
+cd companion-module
+npx --yes corepack@latest yarn install --immutable
+npx --yes corepack@latest yarn package
+```
+
 ## Bedienung
 
 - Dauer eingeben und übernehmen oder eines der neun Presets wählen.

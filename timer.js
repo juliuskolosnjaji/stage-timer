@@ -6,13 +6,15 @@ export class Timer {
   action(type,value) {
     if(type==='start'&&!this.running){this.deadline=performance.now()+this.remaining*1000;this.running=true;}
     else if(type==='pause'){this.remaining=this.seconds();this.running=false;}
+    else if(type==='toggle'){this.action(this.running?'pause':'start');}
     else if(type==='reset'){this.running=false;this.remaining=this.duration;}
     else if(type==='duration'){if(!Number.isInteger(value)||value<1||value>359999)throw Error('Dauer: 1–359999 Sekunden');this.duration=value;this.remaining=value;this.running=false;}
     else if(type==='jog'){if(!Number.isFinite(value)||Math.abs(value)>3600)throw Error('Ungültige Zeitkorrektur');this.remaining=this.seconds()+value;if(this.running)this.deadline=performance.now()+this.remaining*1000;}
     else if(type==='mode'){if(!['timer','clock','black','test'].includes(value))throw Error('Ungültige Ausgabe');this.mode=value;}
     else if(type==='message'){if(typeof value!=='string'||value.length>300)throw Error('Nachricht zu lang');this.message=value;}
     else if(type==='preset'){if(!value||!Number.isInteger(value.index)||value.index<0||value.index>8||!Number.isInteger(value.seconds)||value.seconds<1||value.seconds>359999)throw Error('Ungültiges Preset');this.presets[value.index]=value.seconds;}
-    else if(!['start','pause','reset','duration','jog','mode','message','preset'].includes(type)) throw Error('Unbekannter Befehl');
+    else if(type==='preset-load'){if(!Number.isInteger(value)||value<0||value>8)throw Error('Ungültiges Preset');this.action('duration',this.presets[value]);}
+    else if(!['start','pause','toggle','reset','duration','jog','mode','message','preset','preset-load'].includes(type)) throw Error('Unbekannter Befehl');
   }
 }
 export function validateSettings(input) {
