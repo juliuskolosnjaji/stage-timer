@@ -31,6 +31,7 @@
         </div>
         <div class="screen-actions">
           <button id="renameScreen">Umbenennen</button>
+          <button id="screenLogo">Logo</button>
           <button id="deleteScreen">Löschen</button>
         </div>
         <p id="dmxScreenHint" class="side-note">Der erste Screen ist der DMX-Haupt-Screen</p>
@@ -146,6 +147,7 @@
         <article class="utility-card message-panel">
           <div class="card-heading"><span>NACHRICHT AN DIE BÜHNE</span><span id="messageState">Keine Nachricht aktiv</span></div>
           <div class="message-form">
+            <select id="messageTarget" aria-label="Ziel der Nachricht"></select>
             <input id="message" maxlength="300" placeholder="Nachricht auf dem Ausgabebildschirm …">
             <button id="sendMessage" class="button-accent">Senden</button>
             <button id="clearMessage" title="Nachricht ausblenden">✕</button>
@@ -190,7 +192,7 @@
         </fieldset>
       </div>
       <fieldset class="logo-settings">
-        <legend>Logo-Wasserzeichen</legend>
+        <legend id="logoLegend">Logo-Wasserzeichen</legend>
         <label>Logo hochladen (PNG, JPEG, WebP)<input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
         <div class="logo-preview-row"><img id="logoPreview" alt="Logo-Vorschau" hidden><span id="logoStatus" class="help">Noch kein Logo hochgeladen</span></div>
         <label><input name="showLogo" type="checkbox">Logo in der Ausgabe anzeigen</label>

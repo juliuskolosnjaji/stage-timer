@@ -69,7 +69,7 @@ input[type=checkbox] { accent-color: var(--blue); }
 .screen-select-row { display: grid; grid-template-columns: 38px 1fr; gap: 6px; }
 .screen-icon { min-height: 38px; padding: 4px; color: var(--blue-strong); background: var(--blue-soft); font-size: 17px; }
 .screen-select-row select { width: 100%; min-width: 0; padding: 8px 26px 8px 8px; font-size: 10px; }
-.screen-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+.screen-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; }
 .screen-actions button { min-height: 29px; padding: 4px 6px; font-size: 9px; }
 .side-note { min-height: 24px; margin: 8px 0 0; color: var(--dim); font-size: 9px; line-height: 1.45; }
 .output-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -153,9 +153,10 @@ kbd { padding: 2px 5px; border: 1px solid currentColor; border-radius: 3px; font
 .utility-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 8px; margin-top: 8px; }
 .schedule-form, .message-form { display: flex; align-items: end; gap: 6px; margin-top: 8px; }
 .schedule-form label { display: flex; flex: 1; flex-direction: column; gap: 4px; color: var(--dim); font-size: 8px; }
-.schedule-form input, .message-form input { min-width: 0; padding: 7px 8px; font-size: 9px; }
+.schedule-form input, .message-form input, .message-form select { min-width: 0; padding: 7px 8px; font-size: 9px; }
 .schedule-form button, .message-form button { min-height: 31px; padding: 5px 9px; font-size: 9px; }
 .message-form input { flex: 1; }
+.message-form select { width: min(190px, 34%); }
 
 footer { display: flex; justify-content: space-between; gap: 20px; min-height: 26px; padding: 6px 18px 8px 258px; border-top: 1px solid #141b24; color: #505c6a; background: var(--bg); font-size: 7px; letter-spacing: .13em; }
 footer a { color: #667486; letter-spacing: 0; }
@@ -215,7 +216,7 @@ td:first-child { color: var(--blue); white-space: nowrap; }
   .clock-value { font-size: clamp(36px, 3.5vw, 66px); }
   .date-value { margin-bottom: auto; font-size: 9px; }
   .schedule-form, .message-form { width: 100%; margin: auto 0; }
-  .schedule-form input, .message-form input { padding: 10px; font-size: 10px; }
+  .schedule-form input, .message-form input, .message-form select { padding: 10px; font-size: 10px; }
   .schedule-form button, .message-form button { min-height: 38px; font-size: 10px; }
 }
 

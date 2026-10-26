@@ -13,4 +13,19 @@ test('control UI keeps every element targeted by the client code',async()=>{
   assert.deepEqual(missing,[]);
   assert.match(html,/data-mode="timer"/);
   assert.match(html,/data-jog="300"/);
+  assert.match(html,/id="messageTarget"/);
+  assert.match(html,/id="screenLogo"/);
+  assert.match(script,/document\.activeElement!==input/);
+});
+
+test('display and viewer keep status colors and per-screen logos independent',async()=>{
+  const [display,viewer,viewerCss]=await Promise.all([
+    readFile(new URL('../public/display.js',import.meta.url),'utf8'),
+    readFile(new URL('../public/viewer.js',import.meta.url),'utf8'),
+    readFile(new URL('../public/viewer.css',import.meta.url),'utf8')
+  ]);
+  assert.match(display,/fill.*backgroundColor=statusColor/);
+  assert.match(viewer,/logo\.png\?screen=/);
+  assert.match(viewerCss,/\.screen-logo/);
+  assert.match(viewerCss,/--blue: #68a4ff/);
 });
